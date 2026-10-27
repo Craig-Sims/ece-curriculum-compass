@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 1: Curriculum as a Living Guide for Learning (draft)</title>
+<style>
+:root{
+  --sun:#FFC83D; --sun-d:#B87F00; --coral:#FF6F61; --coral-d:#C33B2E; --sky:#3FB8F0; --sky-d:#0B6FA3;
+  --leaf:#4CC76A; --leaf-d:#1B7F3A; --grape:#8E6CF0; --grape-d:#5A3DBF; --orange:#FF9A3C; --orange-d:#A85500;
+  --ink:#2A2B45; --muted:#58597A; --cream:#FFF8E8; --white:#fff;
+  --round:ui-rounded,"SF Pro Rounded","Avenir Next Rounded","Trebuchet MS","Segoe UI",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);background-image:radial-gradient(rgba(142,108,240,.10) 2px,transparent 2px);background-size:26px 26px;color:var(--ink);font-family:var(--round);font-size:1.125rem;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--grape-d)}
+:focus-visible{outline:4px solid var(--grape);outline-offset:3px;border-radius:10px}
+.skip{position:absolute;left:-999px;top:0;background:#fff;color:var(--ink);padding:.7rem 1rem;z-index:100}.skip:focus{left:.5rem;top:.5rem}
+#progress{position:fixed;top:0;left:0;right:0;height:8px;background:rgba(255,255,255,.7);z-index:50}
+#progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--coral),var(--sun),var(--leaf),var(--sky),var(--grape));border-radius:0 6px 6px 0}
+/* hero */
+.hero{position:relative;overflow:hidden;background:var(--herobg,var(--sky));color:#fff;border-bottom:10px solid var(--sun)}
+.hero-inner{max-width:76rem;margin:0 auto;padding:4.5rem 1.5rem 4rem;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:2rem;align-items:center;position:relative;z-index:2}
+.hero h1{font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.08;margin:0 0 .6rem;font-weight:900;letter-spacing:-.01em;text-shadow:0 3px 0 rgba(0,0,0,.14)}
+.hero .id-title{font-size:clamp(1.15rem,2.4vw,1.6rem);font-weight:800;color:#FFF3B8;margin:0 0 1rem;font-style:italic}
+.hero p{margin:.4rem 0;font-size:1.15rem;max-width:40rem}
+.hero .tag{display:inline-block;background:#fff;color:var(--sky-d);font-weight:800;border-radius:999px;padding:.25rem .9rem;margin:0 0 1rem;font-size:.95rem}
+.hero svg{width:100%;height:auto;max-width:24rem;justify-self:center;display:block}
+.blob{position:absolute;border-radius:50%;opacity:.9;z-index:1}
+.blob.b1{width:14rem;height:14rem;background:var(--coral);left:-5rem;bottom:-6rem}
+.blob.b2{width:9rem;height:9rem;background:var(--sun);right:30%;top:-4rem}
+.blob.b3{width:7rem;height:7rem;background:var(--leaf);right:-2rem;bottom:2rem}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.bob{animation:bob 4s ease-in-out infinite}.bob.d2{animation-delay:.8s}.bob.d3{animation-delay:1.6s}
+/* layout */
+.layout{max-width:76rem;margin:0 auto;padding:2.5rem 1.5rem 5rem;display:grid;grid-template-columns:13rem minmax(0,1fr);gap:2.5rem}
+.rail{position:sticky;top:1.2rem;align-self:start}
+.rail ol{list-style:none;margin:0;padding:0}
+.rail li{margin:0 0 .5rem}
+.rail a{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--muted);font-weight:800;font-size:.95rem;line-height:1.25}
+.rail .dot{flex:0 0 1.9rem;width:1.9rem;height:1.9rem;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:.85rem;border:3px solid #fff;box-shadow:0 3px 0 rgba(0,0,0,.12)}
+.rail li.is-current a{color:var(--ink)}.rail li.is-current .dot{transform:scale(1.2)}
+.rail li.is-done .dot{opacity:.75}
+main{min-width:0}
+h2{font-size:clamp(1.55rem,3vw,2.1rem);line-height:1.2;margin:0 0 .3rem;font-weight:900}
+h3{font-size:1.25rem;margin:1.6rem 0 .5rem;font-weight:800}
+h2 .id,h3 .id{display:block;font-size:1rem;font-weight:700;font-style:italic;color:var(--muted);margin-top:.15rem}
+p{max-width:46rem;margin:0 0 1rem}
+.id{font-style:italic}
+.k{display:inline-block;background:#EDE6FF;color:var(--grape-d);border-radius:999px;padding:0 .6em;font-style:italic;font-weight:700;font-size:.92em;white-space:nowrap}
+.step{background:#fff;border:5px solid var(--c);border-radius:28px;padding:1.6rem 1.7rem 1.8rem;margin:0 0 2.2rem;box-shadow:0 8px 0 var(--cd);position:relative}
+.step>.num{position:absolute;top:-1.5rem;left:1.4rem;width:3rem;height:3rem;border-radius:50%;background:var(--c);color:#fff;font-weight:900;font-size:1.4rem;display:grid;place-items:center;border:4px solid #fff;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+.step>.time{position:absolute;top:-1rem;right:1.4rem;background:var(--c);color:#fff;border-radius:999px;padding:.15rem .9rem;font-weight:800;font-size:.9rem}
+.step h2{color:var(--cd);margin-top:.6rem}
+.s1{--c:var(--coral);--cd:var(--coral-d)}.s2{--c:var(--sun);--cd:var(--sun-d)}.s3{--c:var(--leaf);--cd:var(--leaf-d)}.s4{--c:var(--sky);--cd:var(--sky-d)}.s5{--c:var(--grape);--cd:var(--grape-d)}.s6{--c:var(--orange);--cd:var(--orange-d)}.s7{--c:var(--coral);--cd:var(--coral-d)}
+.s2 .num{color:var(--ink)}.s2 .time{color:var(--ink)}
+.try{background:#FFF3C2;border:4px dashed var(--sun);border-radius:22px;padding:1.1rem 1.3rem;margin:1.1rem 0}
+.try .badge,.learn .badge{display:inline-block;font-weight:900;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:.1rem .8rem;margin-bottom:.5rem}
+.try .badge{background:var(--sun);color:var(--ink)}
+.learn{background:#E4F5FF;border:4px solid var(--sky);border-radius:22px;padding:1.1rem 1.3rem;margin:1.1rem 0}
+.learn .badge{background:var(--sky);color:#fff}
+.quote{border-left:8px solid var(--grape);background:#F3EEFF;border-radius:0 20px 20px 0;padding:.9rem 1.3rem;margin:1rem 0;font-weight:700}
+.field{margin:0 0 1rem}
+.field label{display:block;font-weight:800;margin:0 0 .35rem;color:var(--ink)}
+textarea{width:100%;min-height:5.5rem;font:inherit;padding:.7rem .9rem;border:4px solid #D9D2EE;border-radius:18px;background:#fff;color:var(--ink);resize:vertical}
+textarea:focus{border-color:var(--grape);outline:none;box-shadow:0 0 0 4px rgba(142,108,240,.25)}
+.opts{display:flex;flex-wrap:wrap;gap:.6rem;margin:.4rem 0 .6rem}
+.opt,.btn,.chip{font:inherit;font-weight:800;border:4px solid var(--grape);background:#fff;color:var(--grape-d);border-radius:999px;padding:.4rem 1.1rem;cursor:pointer;box-shadow:0 4px 0 var(--grape-d)}
+.opt:hover,.btn:hover,.chip:hover{transform:translateY(-1px)}
+.opt:active,.btn:active,.chip:active{transform:translateY(3px);box-shadow:0 1px 0 var(--grape-d)}
+.opt[aria-pressed="true"],.chip[aria-pressed="true"]{background:var(--grape);color:#fff}
+.btn.primary{background:var(--leaf);border-color:var(--leaf-d);color:#fff;box-shadow:0 4px 0 var(--leaf-d)}
+.chip{padding:.3rem .95rem}
+.sortitem{background:#fff;border:4px solid #E4DDF7;border-radius:20px;padding:.8rem 1.1rem;margin:0 0 .8rem}
+.sortitem p{margin:0 0 .4rem}
+.fb{margin:.4rem 0 0;padding:.5rem .9rem;border-radius:14px;font-size:1rem;background:#EAFBEF;border:3px solid var(--leaf);display:none}
+.fb.show{display:block}.fb.no{background:#FFF1E0;border-color:var(--orange)}
+.layers{display:grid;gap:.5rem;margin:1rem 0}
+.layers div{border-radius:16px;padding:.6rem 1rem;color:#fff;font-weight:800}
+.l1{background:var(--grape);width:100%}.l2{background:var(--sky);width:88%}.l3{background:var(--leaf-d);width:76%}.l4{background:var(--coral);width:64%}
+.layers small{display:block;font-weight:600;opacity:.95}
+.cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1rem 0}
+.card{background:#fff;border:4px solid var(--c2,#D9D2EE);border-radius:20px;padding:.9rem 1rem}
+.card h4{margin:0 0 .3rem;font-size:1.1rem}.card p{margin:0;font-size:1rem}
+.panels{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin:1rem 0}
+.panels figure{margin:0;background:#fff;border:4px solid var(--sky);border-radius:20px;overflow:hidden}
+.panels figcaption{padding:.5rem .8rem;font-size:.95rem;font-weight:700}
+.panels svg{display:block;width:100%;height:auto}
+.draft{background:#FFE9C7;border:3px dashed var(--orange-d);border-radius:16px;padding:.7rem 1rem;margin:1rem 0;font-size:.95rem}
+.draft p{margin:0;max-width:none}.draft strong{color:var(--orange-d)}
+.tools{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;margin-top:1rem}.status{font-size:.95rem;color:var(--muted)}
+.lo{background:#fff;border:5px solid var(--leaf);border-radius:28px;padding:1.3rem 1.6rem;margin:0 0 2.4rem;box-shadow:0 8px 0 var(--leaf-d)}
+.lo h2{color:var(--leaf-d)}.lo ol{padding-left:1.4rem;margin:.5rem 0 0}.lo li{margin-bottom:.4rem}
+.words{columns:2;column-gap:2rem}.words div{break-inside:avoid;margin:0 0 .7rem}
+.words dt{font-weight:900}.words dd{margin:0;color:var(--muted)}
+.footer{border-top:6px solid var(--sun);background:#fff;padding:1.6rem 1.5rem 2.3rem;color:var(--muted);font-size:.95rem}
+.footer-inner{max-width:76rem;margin:0 auto}
+@media(max-width:60rem){.hero-inner{grid-template-columns:1fr}.hero svg{max-width:14rem;justify-self:start}.layout{grid-template-columns:1fr}.rail{display:none}.cards3,.panels{grid-template-columns:1fr}.words{columns:1}}
+@media(prefers-reduced-motion:reduce){.bob{animation:none}html{scroll-behavior:auto}.opt,.btn,.chip{transition:none}}
+
+.opts[data-multi] .chip{padding:.3rem .95rem}
+input[type=text].tx{width:100%;font:inherit;padding:.55rem .9rem;border:4px solid #D9D2EE;border-radius:999px;background:#fff;color:var(--ink)}
+input[type=text].tx:focus{border-color:var(--grape);outline:none;box-shadow:0 0 0 4px rgba(142,108,240,.25)}
+.light{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem .8rem;align-items:center;background:#fff;border:4px solid #E4DDF7;border-radius:20px;padding:.7rem 1rem;margin:0 0 .7rem}
+.light .opts{margin:0;flex-wrap:nowrap;gap:.3rem}.light .opts .opt{padding:.15rem .45rem;font-size:.82rem;border-width:3px;box-shadow:0 3px 0 var(--grape-d)}
+.light>div:first-child{grid-column:1/-1}.light small{display:block;font-weight:800;color:var(--muted);font-size:.8rem}
+.opt.g[aria-pressed="true"]{background:var(--leaf);border-color:var(--leaf-d);color:#fff}
+.opt.a[aria-pressed="true"]{background:var(--sun);border-color:var(--sun-d);color:var(--ink)}
+.opt.r[aria-pressed="true"]{background:var(--coral);border-color:var(--coral-d);color:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+.two .card ul{margin:.3rem 0 0;padding-left:1.2rem}
+.petals{display:block;margin:0 auto;max-width:22rem;width:100%;height:auto}
+.scene{display:block;margin:1rem auto;max-width:34rem;width:100%;height:auto;border:4px solid var(--sky);border-radius:22px;background:#fff}
+@media(max-width:60rem){.light{grid-template-columns:1fr}.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a><div id="progress" aria-hidden="true"><span></span></div>
+<header class="hero"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+ <div class="hero-inner"><div>
+  <span class="tag">Module 1</span>
+  <h1>Curriculum as a Living Guide for Learning</h1>
+  <p class="id-title">Kurikulum sebagai Panduan Pembelajaran yang Hidup</p>
+  <p>Curriculum as a Compass for Learning in Early Childhood Education. <em>Kurikulum sebagai Kompas Pembelajaran di PAUD.</em></p>
+  <p style="font-size:1rem">Designed by Professor Karen Murcia. Online preparation, about 90 minutes.</p>
+ </div><svg viewBox="0 0 360 330" role="img" aria-label="A compass surrounded by colourful building blocks">
+ <g class="bob"><circle cx="180" cy="150" r="104" fill="#fff"/><circle cx="180" cy="150" r="88" fill="#FFF3B8" stroke="#FF6F61" stroke-width="8"/>
+ <polygon points="180,66 198,150 180,150" fill="#FF6F61"/><polygon points="180,66 162,150 180,150" fill="#C33B2E"/>
+ <polygon points="180,234 198,150 180,150" fill="#8E6CF0"/><polygon points="180,234 162,150 180,150" fill="#5A3DBF"/>
+ <circle cx="180" cy="150" r="11" fill="#2A2B45"/>
+ <g font-family="Trebuchet MS, Arial" font-weight="900" font-size="20" fill="#2A2B45" text-anchor="middle"><text x="180" y="52">N</text><text x="180" y="262">S</text><text x="84" y="157">W</text><text x="276" y="157">E</text></g></g>
+ <g class="bob d2"><rect x="18" y="226" width="64" height="64" rx="12" fill="#4CC76A" transform="rotate(-10 50 258)"/><circle cx="50" cy="258" r="14" fill="#fff" opacity=".85"/></g>
+ <g class="bob d3"><rect x="262" y="228" width="68" height="56" rx="12" fill="#FFC83D" transform="rotate(8 296 256)"/><polygon points="296,238 312,272 280,272" fill="#fff" opacity=".85"/></g>
+ <g class="bob"><rect x="294" y="40" width="48" height="48" rx="12" fill="#8E6CF0" transform="rotate(14 318 64)"/></g>
+ <g class="bob d2"><circle cx="40" cy="64" r="26" fill="#FF9A3C"/><circle cx="40" cy="64" r="10" fill="#fff" opacity=".85"/></g>
+</svg></div></header>
+<div class="layout">
+<nav class="rail" aria-label="Steps"><ol>
+ <li><a href="#s1"><span class="dot" style="background:var(--coral)">1</span>Where curriculum lives</a></li>
+ <li><a href="#s2"><span class="dot" style="background:var(--sun);color:var(--ink)">2</span>Map, script or compass</a></li>
+ <li><a href="#s3"><span class="dot" style="background:var(--leaf)">3</span>A holistic route</a></li>
+ <li><a href="#s4"><span class="dot" style="background:var(--sky)">4</span>Water becomes a bridge</a></li>
+ <li><a href="#s5"><span class="dot" style="background:var(--grape)">5</span>Another curriculum</a></li>
+ <li><a href="#s6"><span class="dot" style="background:var(--orange)">6</span>Audit my setting</a></li>
+ <li><a href="#s7"><span class="dot" style="background:var(--coral)">7</span>My compass sentence</a></li>
+ <li><a href="#words"><span class="dot" style="background:var(--ink)">?</span>Key words</a></li>
+</ol></nav>
+<main id="main">
+
+<section class="lo" aria-labelledby="lo"><h2 id="lo">What you will be able to do<span class="id">Apa yang akan dapat Anda lakukan</span></h2>
+<ol><li>Explain how a curriculum <span class="k">kurikulum</span> works as a compass <span class="k">kompas</span>: it gives direction without prescribing every step.</li>
+<li>Describe the four layers of curriculum (intended, planned, enacted, experienced) and spot where learning can be lost between them.</li>
+<li>Judge whether a classroom episode shows a living curriculum, using evidence of what children do, think and learn.</li>
+<li>Name one real challenge in how the curriculum is used in your own setting.</li></ol></section>
+
+<section class="step s1" id="s1"><span class="num">1</span><span class="time">about 10 min</span>
+<h2>Where does curriculum live?<span class="id">Di mana kurikulum &ldquo;hidup&rdquo;?</span></h2>
+<p>When you hear the word curriculum <span class="k">kurikulum</span>, what comes to mind first? There is no test. We are making our starting ideas visible.</p>
+<div class="try"><span class="badge">Have a go</span><p style="margin-bottom:.5rem"><strong>Choose every word that fits.</strong></p><div class="opts" id="chips" data-key="words" data-label="Words that come to mind when I hear curriculum"><button type="button" class="chip" data-chip="Outcomes">Outcomes <span class="id">(hasil belajar)</span></button><button type="button" class="chip" data-chip="Planning">Planning <span class="id">(perencanaan)</span></button><button type="button" class="chip" data-chip="Activities">Activities <span class="id">(kegiatan)</span></button><button type="button" class="chip" data-chip="Assessment">Assessment <span class="id">(asesmen)</span></button><button type="button" class="chip" data-chip="Children">Children <span class="id">(anak)</span></button><button type="button" class="chip" data-chip="Document">Document <span class="id">(dokumen)</span></button></div></div>
+<div class="learn"><span class="badge">Build understanding</span>
+<p><strong>Curriculum is more than a document.</strong> It has four layers. They are related, but never perfectly identical.</p>
+<div class="layers"><div class="l1">Intended <span style="font-weight:600;font-style:italic">(Yang dimaksudkan)</span><small>What frameworks and goals say we want children to learn</small></div><div class="l2">Planned <span style="font-weight:600;font-style:italic">(Yang direncanakan)</span><small>What educators deliberately design</small></div><div class="l3">Enacted <span style="font-weight:600;font-style:italic">(Yang dilaksanakan)</span><small>What actually happens through people, materials and relationships</small></div><div class="l4">Experienced <span style="font-weight:600;font-style:italic">(Yang dialami anak)</span><small>What the child encounters, feels, understands and learns</small></div></div></div>
+<div class="try"><span class="badge">Have a go</span><p><strong>Which layer is it?</strong> Choose the layer you think each example belongs to. You will see a short explanation after each choice.</p><div id="sorter"></div></div>
+<div class="field-wrap"><div class="field"><label for="l1">Which layer gets most of your attention in your setting at the moment? Why?</label><textarea id="l1" data-key="l1"></textarea></div></div>
+</section>
+<section class="step s2" id="s2"><span class="num">2</span><span class="time">about 10 min</span>
+<h2>Map, script or compass?<span class="id">Peta, naskah atau kompas?</span></h2>
+<div class="try"><span class="badge">Have a go</span><p><strong>Which metaphor is closest to how the curriculum feels in your setting?</strong></p>
+<div class="opts" role="group" aria-label="The metaphor closest to the curriculum in my setting" data-key="metaphor" data-label="The metaphor closest to the curriculum in my setting" data-opts="Map (peta)|Script (naskah)|Compass (kompas)"></div>
+<div class="field"><label for="m1">Why? Give one example from your week.</label><textarea id="m1" data-key="m1"></textarea></div></div>
+<div class="learn"><span class="badge">Build understanding</span>
+<p><strong>Curriculum is a compass, not a script.</strong> A compass gives direction without prescribing every step.</p>
+<div class="cards3"><div class="card" style="--c2:var(--coral)"><h4>A map</h4><p>A fixed route to follow, step by step.</p></div><div class="card" style="--c2:var(--sun)"><h4>A script</h4><p>Lines to deliver exactly as written.</p></div><div class="card" style="--c2:var(--leaf)"><h4>A compass</h4><p>Direction, shared intentions, and space for your professional judgement.</p></div></div>
+<div class="quote">Knowing the curriculum well makes responsiveness possible. <span class="k">tahu kurikulum dengan baik membuat Anda dapat menanggapi anak</span></div></div>
+
+</section>
+<section class="step s3" id="s3"><span class="num">3</span><span class="time">about 15 min</span>
+<h2>A holistic route<span class="id">Jalur yang holistik</span></h2>
+<div class="learn"><span class="badge">Build understanding</span>
+<p>Indonesia&rsquo;s 2025 Guide to Learning and Assessment (<em>Panduan Pembelajaran dan Asesmen</em>) describes deep learning <span class="k">pembelajaran mendalam</span>. It aims at eight graduate profile dimensions <span class="k">dimensi profil lulusan</span> and rests on three principles, carried out through thought, heart, feeling and body <span class="k">olah pikir, olah hati, olah rasa, olah raga</span>.</p>
+<div class="cards3">
+<div class="card" style="--c2:var(--sky)"><h4>Mindful <span class="k">berkesadaran</span></h4><p>Learners know what they are learning and why, feel comfortable, make choices, and are curious.</p></div>
+<div class="card" style="--c2:var(--leaf)"><h4>Meaningful <span class="k">bermakna</span></h4><p>Learning connects to real life and context. Children can use what they know. Families and community are sources of knowledge.</p></div>
+<div class="card" style="--c2:var(--coral)"><h4>Joyful <span class="k">menggembirakan</span></h4><p>A positive, challenging atmosphere with interest, curiosity, room for initiative and creativity, and the &ldquo;Aha!&rdquo; moment.</p></div></div>
+<p>Learning also moves through three experiences: understanding <span class="k">memahami</span>, applying <span class="k">mengaplikasi</span> and reflecting <span class="k">merefleksi</span>.</p></div>
+<div class="try"><span class="badge">Have a go</span><p><strong>What could this look like for a four-year-old?</strong> Write what you might see or hear, so the principle becomes observable.</p>
+<div class="field"><label for="h1">Mindful (berkesadaran) looks like...</label><textarea id="h1" data-key="h1"></textarea></div><div class="field"><label for="h2">Meaningful (bermakna) looks like...</label><textarea id="h2" data-key="h2"></textarea></div><div class="field"><label for="h3">Joyful (menggembirakan) looks like...</label><textarea id="h3" data-key="h3"></textarea></div>
+<details><summary style="cursor:pointer;font-weight:800;color:var(--grape-d)">Compare with some ideas</summary>
+<p style="margin-top:.6rem"><strong>Mindful:</strong> curious, aware, making choices, trying strategies. <strong>Meaningful:</strong> connected to life, relevant to context, useful beyond the task. <strong>Joyful:</strong> positive and challenging, motivating, creative, &ldquo;Aha!&rdquo; moments. And joyful is not the same as simply entertained.</p></details></div>
+
+</section>
+<section class="step s4" id="s4"><span class="num">4</span><span class="time">about 15 min</span>
+<h2>When water becomes a bridge<span class="id">Ketika air menjadi jembatan</span></h2>
+<p>A planned activity is not always the activity that happens. Read this short story.</p>
+<div class="panels">
+<figure><svg viewBox="0 0 200 160" role="img" aria-label="A water tray with a leaf and a stone"><rect x="20" y="95" width="160" height="50" rx="12" fill="#9BD8F7" stroke="#0B6FA3" stroke-width="4"/><ellipse cx="70" cy="100" rx="22" ry="8" fill="#4CC76A"/><circle cx="130" cy="124" r="12" fill="#8D8BA7"/><path d="M60 40 l8 -14 l8 14 z" fill="#FFC83D"/><circle cx="68" cy="52" r="9" fill="#FF9A3C"/></svg><figcaption><strong>1.</strong> <strong>Planned.</strong> The educator sets up a water tray to explore floating and sinking.</figcaption></figure>
+<figure><svg viewBox="0 0 200 160" role="img" aria-label="Two children looking at the tray with a thought bubble"><rect x="20" y="95" width="160" height="50" rx="12" fill="#9BD8F7" stroke="#0B6FA3" stroke-width="4"/><ellipse cx="60" cy="100" rx="22" ry="8" fill="#4CC76A"/><circle cx="35" cy="48" r="14" fill="#FF9A3C"/><circle cx="165" cy="48" r="14" fill="#FFC83D"/><rect x="25" y="62" width="20" height="26" rx="8" fill="#FF6F61"/><rect x="155" y="62" width="20" height="26" rx="8" fill="#8E6CF0"/><ellipse cx="100" cy="30" rx="34" ry="18" fill="#fff" stroke="#8E6CF0" stroke-width="4"/><text x="100" y="37" text-anchor="middle" font-size="22" font-weight="900" fill="#5A3DBF">?!</text></svg><figcaption><strong>2.</strong> The children notice something new. A leaf floats, a stone sinks, and a question appears.</figcaption></figure>
+<figure><svg viewBox="0 0 200 160" role="img" aria-label="A bridge of blocks built across the water tray"><rect x="20" y="95" width="160" height="50" rx="12" fill="#9BD8F7" stroke="#0B6FA3" stroke-width="4"/><rect x="30" y="76" width="30" height="22" rx="5" fill="#FF6F61"/><rect x="62" y="70" width="30" height="22" rx="5" fill="#FFC83D"/><rect x="94" y="70" width="30" height="22" rx="5" fill="#4CC76A"/><rect x="126" y="76" width="30" height="22" rx="5" fill="#8E6CF0"/><circle cx="100" cy="40" r="12" fill="#FF9A3C"/><rect x="90" y="52" width="20" height="16" rx="6" fill="#3FB8F0"/></svg><figcaption><strong>3.</strong> They decide to build a bridge across the water tray with blocks.</figcaption></figure>
+</div>
+<div class="try"><span class="badge">Have a go</span><p><strong>Has the curriculum been interrupted, or has it become alive?</strong></p>
+<div class="opts" role="group" aria-label="The water-to-bridge story: interrupted or alive" data-key="bridge" data-label="The water-to-bridge story: interrupted or alive" data-opts="Interrupted|Alive|A bit of both"></div>
+<div class="field"><label for="w1">What learning is now visible? List what the children are doing, saying and working out.</label><textarea id="w1" data-key="w1"></textarea></div>
+<details><summary style="cursor:pointer;font-weight:800;color:var(--grape-d)">Compare with some ideas</summary><p style="margin-top:.6rem">Design (<em>desain</em>), measurement (<em>pengukuran</em>), collaboration (<em>kolaborasi</em>), persistence (<em>ketekunan</em>), language (<em>bahasa</em>) and the physical properties of materials (<em>sifat benda</em>).</p></details></div>
+
+</section>
+<section class="step s5" id="s5"><span class="num">5</span><span class="time">about 10 min, optional</span>
+<h2>A window on another curriculum<span class="id">Jendela ke kurikulum lain</span></h2>
+<div class="learn"><span class="badge">Build understanding</span>
+<p>Australia&rsquo;s Early Years Learning Framework (EYLF V2.0, 2022) is built from a vision, principles, practices and learning outcomes. We use it as a <strong>comparative lens, not a replacement</strong> for your curriculum.</p>
+<p>Some of its practices: responsiveness to children, play-based learning with intentionality, holistic and integrated approaches, learning environments, cultural responsiveness, and assessment and evaluation for learning. Each depends on professional judgement.</p></div>
+<div class="try"><span class="badge">Have a go</span><p><strong>If a curriculum already told educators exactly what to do, why would responsiveness be necessary?</strong></p>
+<div class="field"><label for="e1">One question that both curricula ask of educators is...</label><textarea id="e1" data-key="e1"></textarea></div></div>
+
+</section>
+<section class="step s6" id="s6"><span class="num">6</span><span class="time">about 20 min</span>
+<h2>Audit my setting<span class="id">Meninjau tempat saya mengajar</span></h2>
+<div class="learn"><span class="badge">Build understanding</span>
+<p>The programme&rsquo;s Terms of Reference report findings from the 2024 Learning Environment Survey (<em>Sulingjar</em>): only <strong>11.44%</strong> of institutions show a high level of effective learning planning, <strong>19.24%</strong> consistently use pedagogy suited to early childhood, and <strong>23.63%</strong> effectively build children&rsquo;s foundational competencies.</p>
+<p>One reason it gives: the curriculum is treated as an administrative document more than a practical guide.</p></div>
+<div class="try"><span class="badge">Have a go</span><p><strong>How true is each statement in your setting?</strong> This is a mirror for you, not a score.</p><div id="audit"></div><div class="fb" id="auditres" aria-live="polite"></div></div>
+<div class="field"><label for="a1">One challenge in how the curriculum is used in my setting is...</label><textarea id="a1" data-key="a1"></textarea></div>
+</section>
+<section class="step s7" id="s7"><span class="num">7</span><span class="time">about 10 min</span>
+<h2>My compass sentence<span class="id">Kalimat kompas saya</span></h2>
+<div class="try"><span class="badge">Have a go</span><p>Pull it together in your own words. This is the one thing to bring to the live session.</p>
+<div class="field"><label for="f1">In my setting, the curriculum feels like a (map, script, compass, or your own image) because...</label><textarea id="f1" data-key="f1"></textarea></div>
+<div class="field"><label for="f2">One challenge I want to work on is...</label><textarea id="f2" data-key="f2"></textarea></div>
+<div class="field"><label for="f3">One thing I would like to ask or discuss in the live session is...</label><textarea id="f3" data-key="f3"></textarea></div>
+<div class="tools"><button type="button" class="btn primary" data-export>Download my responses</button><span class="status">Your answers are saved on this device only. The download includes all of them. / Jawaban Anda tersimpan di perangkat ini.</span></div></div>
+</section>
+<section class="lo" id="words" style="--x:0;border-color:var(--grape);box-shadow:0 8px 0 var(--grape-d)"><h2 style="color:var(--grape-d)">Key words<span class="id">Kata kunci</span></h2><dl class="words"><div><dt>Curriculum</dt><dd><em>Kurikulum</em></dd></div><div><dt>Compass</dt><dd><em>Kompas</em></dd></div><div><dt>National learning outcomes</dt><dd><em>Capaian Pembelajaran (CP)</em></dd></div><div><dt>Deep learning</dt><dd><em>Pembelajaran mendalam</em></dd></div><div><dt>Mindful</dt><dd><em>Berkesadaran</em></dd></div><div><dt>Meaningful</dt><dd><em>Bermakna</em></dd></div><div><dt>Joyful</dt><dd><em>Menggembirakan</em></dd></div><div><dt>Understanding</dt><dd><em>Memahami</em></dd></div><div><dt>Applying</dt><dd><em>Mengaplikasi</em></dd></div><div><dt>Reflecting</dt><dd><em>Merefleksi</em></dd></div><div><dt>Graduate profile dimensions</dt><dd><em>Dimensi profil lulusan</em></dd></div><div><dt>Assessment</dt><dd><em>Asesmen</em></dd></div></dl>
+<p style="font-size:.95rem;color:var(--muted)">A fuller glossary is on the programme page.</p></section>
+<section class="lo" style="border-color:var(--sky);box-shadow:0 8px 0 var(--sky-d)"><h2 style="color:var(--sky-d)">References</h2>
+<p style="font-size:.95rem">Badan Standar, Kurikulum, dan Asesmen Pendidikan. (2025). <em>Panduan pembelajaran dan asesmen: Pendidikan anak usia dini, jenjang pendidikan dasar, dan jenjang pendidikan menengah</em> (edisi revisi). Kementerian Pendidikan Dasar dan Menengah.</p>
+<p style="font-size:.95rem">Australian Government Department of Education. (2022). <em>Belonging, being and becoming: The Early Years Learning Framework for Australia (V2.0)</em>.</p>
+<p style="font-size:.95rem">Terms of Reference: Technical Professional Learning Programme on the Curriculum as a Compass for Learning in Early Childhood Education. (2026). Directorate of Early Childhood and Nonformal Education Teachers, Ministry of Primary and Secondary Education.</p></section>
+</main></div>
+<footer class="footer"><div class="footer-inner">Curtin University School of Education &times; Direktorat Guru PAUD dan PNF, Kementerian Pendidikan Dasar dan Menengah, Republik Indonesia</div></footer>
+<script>
+(function(){
+  var P='ecem1:', SORT=[["The national learning outcomes (CP) for early childhood education.", "Intended", "They say what the frameworks and goals want children to learn."], ["The weekly plan I wrote on Sunday evening.", "Planned", "It is what the educator deliberately designs."], ["I put out water trays when the children asked about boats.", "Enacted", "It is what actually happens through people, materials and relationships."], ["Rani feels proud that her boat floated.", "Experienced", "It is what the child encounters, feels, understands and learns."], ["The school's vision and mission statement.", "Intended", "It states what the institution intends for children's learning."], ["The materials I set out in the sand corner before the children arrive.", "Planned", "They are part of what the educator designs in advance."], ["What the educator says and does while the children play.", "Enacted", "It is the curriculum happening through relationships and decisions."], ["What a child understands and remembers afterwards.", "Experienced", "It is the child's own experience of the curriculum."]], AUDIT=[["I look at the curriculum when I plan what children will do.", "g"], ["I can explain what the curriculum is aiming for, in my own words.", "g"], ["What I observe in children changes what I plan next.", "g"], ["My planning, teaching and assessment connect to the same curriculum goals.", "g"], ["I mainly complete curriculum documents for supervisors or inspections.", "a"], ["Plans are written, then not looked at again.", "a"], ["Early literacy and numeracy take most of my planning time.", "a"], ["Activities are chosen first, and curriculum goals are added afterwards.", "a"]], LAYERS=['Intended','Planned','Enacted','Experienced'];
+
+  function get(k){try{return localStorage.getItem(P+k)}catch(e){return null}}
+  function set(k,v){try{localStorage.setItem(P+k,v)}catch(e){}}
+  function norm(s){return s.replace(/\s+/g,' ').trim()}
+  function $(id){return document.getElementById(id)}
+  var bar=document.querySelector('#progress span');
+  function prog(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;if(bar)bar.style.width=(m>0?h.scrollTop/m*100:0)+'%'}
+  addEventListener('scroll',prog,{passive:true});prog();
+
+  document.querySelectorAll('textarea[data-key]').forEach(function(t){var v=get(t.dataset.key);if(v)t.value=v;t.addEventListener('input',function(){set(t.dataset.key,t.value)})});
+  /* single-select option groups */
+  function buildOpts(g,list,key,cb){var cur=get(key);list.forEach(function(o){var b=document.createElement('button');b.type='button';b.className='opt';b.textContent=o;b.setAttribute('aria-pressed',String(cur===o));
+    b.addEventListener('click',function(){g.querySelectorAll('.opt').forEach(function(x){x.setAttribute('aria-pressed','false')});b.setAttribute('aria-pressed','true');set(key,o);if(cb)cb(o)});g.appendChild(b)})}
+  document.querySelectorAll('.opts[data-opts]').forEach(function(g){buildOpts(g,g.dataset.opts.split('|'),g.dataset.key)});
+  /* chips multi-select */
+  var chipBox=$('chips'), saved=[]; try{saved=JSON.parse(get('words')||'[]')}catch(e){}
+  chipBox.querySelectorAll('.chip').forEach(function(c){var on=saved.indexOf(c.dataset.chip)>-1;c.setAttribute('aria-pressed',String(on));
+    c.addEventListener('click',function(){var on2=c.getAttribute('aria-pressed')!=='true';c.setAttribute('aria-pressed',String(on2));var list=[];chipBox.querySelectorAll('.chip').forEach(function(x){if(x.getAttribute('aria-pressed')==='true')list.push(x.dataset.chip)});set('words',JSON.stringify(list))})});
+  /* layer sorter */
+  var sorter=$('sorter');
+  SORT.forEach(function(it,i){var key='sort'+i;var d=document.createElement('div');d.className='sortitem';d.innerHTML='<p><strong>'+it[0]+'</strong></p><div class="opts" role="group" aria-label="Layer for: '+it[0].replace(/"/g,'')+'"></div><div class="fb" aria-live="polite"></div>';
+    var g=d.querySelector('.opts'),fb=d.querySelector('.fb');
+    function show(o){fb.className='fb show'+(o===it[1]?'':' no');fb.textContent=(o===it[1]?'Yes: ':'Not quite. This is the '+it[1].toLowerCase()+' layer: ')+it[2]}
+    buildOpts(g,LAYERS,key,show); var cur=get(key); if(cur) show(cur); sorter.appendChild(d)});
+  /* audit */
+  var aud=$('audit'),res=$('auditres'),SC=['Rarely','Sometimes','Often'];
+  function auditSummary(){var ans=0,score=0;AUDIT.forEach(function(it,i){var v=get('aud'+i);if(v){ans++;var n=SC.indexOf(v);score+=(it[1]==='g'?n:2-n)}});
+    if(ans<AUDIT.length){res.className='fb';return}
+    var max=AUDIT.length*2,msg=score>=max*0.66?'Your answers lean towards the curriculum as a practical guide for planning, teaching and assessment.':(score>=max*0.4?'Your answers show a mix: parts of the curriculum guide your practice and parts are mostly paperwork.':'Your answers lean towards the curriculum as an administrative record. That is common, and it is exactly what this programme works on together.');
+    res.className='fb show';res.textContent=msg;set('audsum',msg)}
+  AUDIT.forEach(function(it,i){var d=document.createElement('div');d.className='sortitem';d.innerHTML='<p>'+it[0]+'</p><div class="opts" role="group" aria-label="'+it[0]+'"></div>';buildOpts(d.querySelector('.opts'),SC,'aud'+i,auditSummary);aud.appendChild(d)});
+  auditSummary();
+  /* export */
+  var NONE='(no response)';
+  function collect(){
+    var o=['Module 1: Curriculum as a Living Guide for Learning','My responses (online preparation)',''];
+    o.push('1. WHERE DOES CURRICULUM LIVE?'); var w=[];try{w=JSON.parse(get('words')||'[]')}catch(e){} o.push('Words that come to mind when I hear curriculum:','  '+(w.length?w.join(', '):NONE));
+    SORT.forEach(function(it,i){o.push('Layer for: '+it[0],'  '+(get('sort'+i)||NONE))});
+    o.push('Which layer gets most of my attention, and why:','  '+(get('l1')||NONE),'');
+    o.push('2. MAP, SCRIPT OR COMPASS?','Metaphor closest to my setting:','  '+(get('metaphor')||NONE),'Why:','  '+(get('m1')||NONE),'');
+    o.push('3. A HOLISTIC ROUTE','Mindful looks like:','  '+(get('h1')||NONE),'Meaningful looks like:','  '+(get('h2')||NONE),'Joyful looks like:','  '+(get('h3')||NONE),'');
+    o.push('4. WHEN WATER BECOMES A BRIDGE','Interrupted or alive:','  '+(get('bridge')||NONE),'Learning now visible:','  '+(get('w1')||NONE),'');
+    o.push('5. A WINDOW ON ANOTHER CURRICULUM','A question both curricula ask of educators:','  '+(get('e1')||NONE),'');
+    o.push('6. AUDIT MY SETTING'); AUDIT.forEach(function(it,i){o.push(it[0],'  '+(get('aud'+i)||NONE))}); o.push('Summary:','  '+(get('audsum')||NONE),'One challenge in my setting:','  '+(get('a1')||NONE),'');
+    o.push('7. MY COMPASS SENTENCE','The curriculum feels like a...:','  '+(get('f1')||NONE),'One challenge I want to work on:','  '+(get('f2')||NONE),'Something to ask or discuss live:','  '+(get('f3')||NONE));
+    return o.join('\n');
+  }
+  document.querySelectorAll('[data-export]').forEach(function(b){b.addEventListener('click',function(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([collect()],{type:'text/plain'}));a.download='my-responses-module-1.txt';document.body.appendChild(a);a.click();a.remove()})});
+  /* step tracker */
+  var links=[].slice.call(document.querySelectorAll('.rail a')),secs=links.map(function(a){return document.querySelector(a.getAttribute('href'))});
+  function track(){var y=innerHeight*0.4,idx=0;secs.forEach(function(s,i){if(s.getBoundingClientRect().top<=y)idx=i});if(innerHeight+scrollY>=document.body.scrollHeight-4)idx=secs.length-1;
+    links.forEach(function(a,i){var li=a.parentNode;li.classList.toggle('is-current',i===idx);li.classList.toggle('is-done',i<idx&&i<7);if(i===idx)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current')})}
+  addEventListener('scroll',track,{passive:true});addEventListener('resize',track);track();
+})();
+</script>
+</body>
+</html>

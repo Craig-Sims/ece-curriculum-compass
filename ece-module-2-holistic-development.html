@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 2: Planning for Holistic Foundational Development (draft)</title>
+<style>
+:root{
+  --sun:#FFC83D; --sun-d:#B87F00; --coral:#FF6F61; --coral-d:#C33B2E; --sky:#3FB8F0; --sky-d:#0B6FA3;
+  --leaf:#4CC76A; --leaf-d:#1B7F3A; --grape:#8E6CF0; --grape-d:#5A3DBF; --orange:#FF9A3C; --orange-d:#A85500;
+  --ink:#2A2B45; --muted:#58597A; --cream:#FFF8E8; --white:#fff;
+  --round:ui-rounded,"SF Pro Rounded","Avenir Next Rounded","Trebuchet MS","Segoe UI",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);background-image:radial-gradient(rgba(142,108,240,.10) 2px,transparent 2px);background-size:26px 26px;color:var(--ink);font-family:var(--round);font-size:1.125rem;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--grape-d)}
+:focus-visible{outline:4px solid var(--grape);outline-offset:3px;border-radius:10px}
+.skip{position:absolute;left:-999px;top:0;background:#fff;color:var(--ink);padding:.7rem 1rem;z-index:100}.skip:focus{left:.5rem;top:.5rem}
+#progress{position:fixed;top:0;left:0;right:0;height:8px;background:rgba(255,255,255,.7);z-index:50}
+#progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--coral),var(--sun),var(--leaf),var(--sky),var(--grape));border-radius:0 6px 6px 0}
+/* hero */
+.hero{position:relative;overflow:hidden;background:var(--herobg,var(--sky));color:#fff;border-bottom:10px solid var(--sun)}
+.hero-inner{max-width:76rem;margin:0 auto;padding:4.5rem 1.5rem 4rem;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:2rem;align-items:center;position:relative;z-index:2}
+.hero h1{font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.08;margin:0 0 .6rem;font-weight:900;letter-spacing:-.01em;text-shadow:0 3px 0 rgba(0,0,0,.14)}
+.hero .id-title{font-size:clamp(1.15rem,2.4vw,1.6rem);font-weight:800;color:#FFF3B8;margin:0 0 1rem;font-style:italic}
+.hero p{margin:.4rem 0;font-size:1.15rem;max-width:40rem}
+.hero .tag{display:inline-block;background:#fff;color:var(--sky-d);font-weight:800;border-radius:999px;padding:.25rem .9rem;margin:0 0 1rem;font-size:.95rem}
+.hero svg{width:100%;height:auto;max-width:24rem;justify-self:center;display:block}
+.blob{position:absolute;border-radius:50%;opacity:.9;z-index:1}
+.blob.b1{width:14rem;height:14rem;background:var(--coral);left:-5rem;bottom:-6rem}
+.blob.b2{width:9rem;height:9rem;background:var(--sun);right:30%;top:-4rem}
+.blob.b3{width:7rem;height:7rem;background:var(--leaf);right:-2rem;bottom:2rem}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.bob{animation:bob 4s ease-in-out infinite}.bob.d2{animation-delay:.8s}.bob.d3{animation-delay:1.6s}
+/* layout */
+.layout{max-width:76rem;margin:0 auto;padding:2.5rem 1.5rem 5rem;display:grid;grid-template-columns:13rem minmax(0,1fr);gap:2.5rem}
+.rail{position:sticky;top:1.2rem;align-self:start}
+.rail ol{list-style:none;margin:0;padding:0}
+.rail li{margin:0 0 .5rem}
+.rail a{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--muted);font-weight:800;font-size:.95rem;line-height:1.25}
+.rail .dot{flex:0 0 1.9rem;width:1.9rem;height:1.9rem;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:.85rem;border:3px solid #fff;box-shadow:0 3px 0 rgba(0,0,0,.12)}
+.rail li.is-current a{color:var(--ink)}.rail li.is-current .dot{transform:scale(1.2)}
+.rail li.is-done .dot{opacity:.75}
+main{min-width:0}
+h2{font-size:clamp(1.55rem,3vw,2.1rem);line-height:1.2;margin:0 0 .3rem;font-weight:900}
+h3{font-size:1.25rem;margin:1.6rem 0 .5rem;font-weight:800}
+h2 .id,h3 .id{display:block;font-size:1rem;font-weight:700;font-style:italic;color:var(--muted);margin-top:.15rem}
+p{max-width:46rem;margin:0 0 1rem}
+.id{font-style:italic}
+.k{display:inline-block;background:#EDE6FF;color:var(--grape-d);border-radius:999px;padding:0 .6em;font-style:italic;font-weight:700;font-size:.92em;white-space:nowrap}
+.step{background:#fff;border:5px solid var(--c);border-radius:28px;padding:1.6rem 1.7rem 1.8rem;margin:0 0 2.2rem;box-shadow:0 8px 0 var(--cd);position:relative}
+.step>.num{position:absolute;top:-1.5rem;left:1.4rem;width:3rem;height:3rem;border-radius:50%;background:var(--c);color:#fff;font-weight:900;font-size:1.4rem;display:grid;place-items:center;border:4px solid #fff;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+.step>.time{position:absolute;top:-1rem;right:1.4rem;background:var(--c);color:#fff;border-radius:999px;padding:.15rem .9rem;font-weight:800;font-size:.9rem}
+.step h2{color:var(--cd);margin-top:.6rem}
+.s1{--c:var(--coral);--cd:var(--coral-d)}.s2{--c:var(--sun);--cd:var(--sun-d)}.s3{--c:var(--leaf);--cd:var(--leaf-d)}.s4{--c:var(--sky);--cd:var(--sky-d)}.s5{--c:var(--grape);--cd:var(--grape-d)}.s6{--c:var(--orange);--cd:var(--orange-d)}.s7{--c:var(--coral);--cd:var(--coral-d)}
+.s2 .num{color:var(--ink)}.s2 .time{color:var(--ink)}
+.try{background:#FFF3C2;border:4px dashed var(--sun);border-radius:22px;padding:1.1rem 1.3rem;margin:1.1rem 0}
+.try .badge,.learn .badge{display:inline-block;font-weight:900;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:.1rem .8rem;margin-bottom:.5rem}
+.try .badge{background:var(--sun);color:var(--ink)}
+.learn{background:#E4F5FF;border:4px solid var(--sky);border-radius:22px;padding:1.1rem 1.3rem;margin:1.1rem 0}
+.learn .badge{background:var(--sky);color:#fff}
+.quote{border-left:8px solid var(--grape);background:#F3EEFF;border-radius:0 20px 20px 0;padding:.9rem 1.3rem;margin:1rem 0;font-weight:700}
+.field{margin:0 0 1rem}
+.field label{display:block;font-weight:800;margin:0 0 .35rem;color:var(--ink)}
+textarea{width:100%;min-height:5.5rem;font:inherit;padding:.7rem .9rem;border:4px solid #D9D2EE;border-radius:18px;background:#fff;color:var(--ink);resize:vertical}
+textarea:focus{border-color:var(--grape);outline:none;box-shadow:0 0 0 4px rgba(142,108,240,.25)}
+.opts{display:flex;flex-wrap:wrap;gap:.6rem;margin:.4rem 0 .6rem}
+.opt,.btn,.chip{font:inherit;font-weight:800;border:4px solid var(--grape);background:#fff;color:var(--grape-d);border-radius:999px;padding:.4rem 1.1rem;cursor:pointer;box-shadow:0 4px 0 var(--grape-d)}
+.opt:hover,.btn:hover,.chip:hover{transform:translateY(-1px)}
+.opt:active,.btn:active,.chip:active{transform:translateY(3px);box-shadow:0 1px 0 var(--grape-d)}
+.opt[aria-pressed="true"],.chip[aria-pressed="true"]{background:var(--grape);color:#fff}
+.btn.primary{background:var(--leaf);border-color:var(--leaf-d);color:#fff;box-shadow:0 4px 0 var(--leaf-d)}
+.chip{padding:.3rem .95rem}
+.sortitem{background:#fff;border:4px solid #E4DDF7;border-radius:20px;padding:.8rem 1.1rem;margin:0 0 .8rem}
+.sortitem p{margin:0 0 .4rem}
+.fb{margin:.4rem 0 0;padding:.5rem .9rem;border-radius:14px;font-size:1rem;background:#EAFBEF;border:3px solid var(--leaf);display:none}
+.fb.show{display:block}.fb.no{background:#FFF1E0;border-color:var(--orange)}
+.layers{display:grid;gap:.5rem;margin:1rem 0}
+.layers div{border-radius:16px;padding:.6rem 1rem;color:#fff;font-weight:800}
+.l1{background:var(--grape);width:100%}.l2{background:var(--sky);width:88%}.l3{background:var(--leaf-d);width:76%}.l4{background:var(--coral);width:64%}
+.layers small{display:block;font-weight:600;opacity:.95}
+.cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1rem 0}
+.card{background:#fff;border:4px solid var(--c2,#D9D2EE);border-radius:20px;padding:.9rem 1rem}
+.card h4{margin:0 0 .3rem;font-size:1.1rem}.card p{margin:0;font-size:1rem}
+.panels{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin:1rem 0}
+.panels figure{margin:0;background:#fff;border:4px solid var(--sky);border-radius:20px;overflow:hidden}
+.panels figcaption{padding:.5rem .8rem;font-size:.95rem;font-weight:700}
+.panels svg{display:block;width:100%;height:auto}
+.draft{background:#FFE9C7;border:3px dashed var(--orange-d);border-radius:16px;padding:.7rem 1rem;margin:1rem 0;font-size:.95rem}
+.draft p{margin:0;max-width:none}.draft strong{color:var(--orange-d)}
+.tools{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;margin-top:1rem}.status{font-size:.95rem;color:var(--muted)}
+.lo{background:#fff;border:5px solid var(--leaf);border-radius:28px;padding:1.3rem 1.6rem;margin:0 0 2.4rem;box-shadow:0 8px 0 var(--leaf-d)}
+.lo h2{color:var(--leaf-d)}.lo ol{padding-left:1.4rem;margin:.5rem 0 0}.lo li{margin-bottom:.4rem}
+.words{columns:2;column-gap:2rem}.words div{break-inside:avoid;margin:0 0 .7rem}
+.words dt{font-weight:900}.words dd{margin:0;color:var(--muted)}
+.footer{border-top:6px solid var(--sun);background:#fff;padding:1.6rem 1.5rem 2.3rem;color:var(--muted);font-size:.95rem}
+.footer-inner{max-width:76rem;margin:0 auto}
+@media(max-width:60rem){.hero-inner{grid-template-columns:1fr}.hero svg{max-width:14rem;justify-self:start}.layout{grid-template-columns:1fr}.rail{display:none}.cards3,.panels{grid-template-columns:1fr}.words{columns:1}}
+@media(prefers-reduced-motion:reduce){.bob{animation:none}html{scroll-behavior:auto}.opt,.btn,.chip{transition:none}}
+
+.opts[data-multi] .chip{padding:.3rem .95rem}
+input[type=text].tx{width:100%;font:inherit;padding:.55rem .9rem;border:4px solid #D9D2EE;border-radius:999px;background:#fff;color:var(--ink)}
+input[type=text].tx:focus{border-color:var(--grape);outline:none;box-shadow:0 0 0 4px rgba(142,108,240,.25)}
+.light{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem .8rem;align-items:center;background:#fff;border:4px solid #E4DDF7;border-radius:20px;padding:.7rem 1rem;margin:0 0 .7rem}
+.light .opts{margin:0;flex-wrap:nowrap;gap:.3rem}.light .opts .opt{padding:.15rem .45rem;font-size:.82rem;border-width:3px;box-shadow:0 3px 0 var(--grape-d)}
+.light>div:first-child{grid-column:1/-1}.light small{display:block;font-weight:800;color:var(--muted);font-size:.8rem}
+.opt.g[aria-pressed="true"]{background:var(--leaf);border-color:var(--leaf-d);color:#fff}
+.opt.a[aria-pressed="true"]{background:var(--sun);border-color:var(--sun-d);color:var(--ink)}
+.opt.r[aria-pressed="true"]{background:var(--coral);border-color:var(--coral-d);color:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+.two .card ul{margin:.3rem 0 0;padding-left:1.2rem}
+.petals{display:block;margin:0 auto;max-width:22rem;width:100%;height:auto}
+.scene{display:block;margin:1rem auto;max-width:34rem;width:100%;height:auto;border:4px solid var(--sky);border-radius:22px;background:#fff}
+@media(max-width:60rem){.light{grid-template-columns:1fr}.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a><div id="progress" aria-hidden="true"><span></span></div>
+<header class="hero" style="--herobg:#1B7F3A"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+ <div class="hero-inner"><div>
+  <span class="tag" style="color:#1B7F3A">Module 2</span>
+  <h1>Planning for Holistic Foundational Development</h1><p class="id-title">Perencanaan untuk Perkembangan Fondasi yang Holistik</p>
+  <p>Curriculum as a Compass for Learning in Early Childhood Education. <em>Kurikulum sebagai Kompas Pembelajaran di PAUD.</em></p>
+  <p style="font-size:1rem">Designed by Dr Emma Cross. Online preparation, about 90 minutes.</p>
+ </div><svg viewBox="0 0 360 330" role="img" aria-label="A compass surrounded by colourful building blocks">
+ <g class="bob"><circle cx="180" cy="150" r="104" fill="#fff"/><circle cx="180" cy="150" r="88" fill="#FFF3B8" stroke="#FF6F61" stroke-width="8"/>
+ <polygon points="180,66 198,150 180,150" fill="#FF6F61"/><polygon points="180,66 162,150 180,150" fill="#C33B2E"/>
+ <polygon points="180,234 198,150 180,150" fill="#8E6CF0"/><polygon points="180,234 162,150 180,150" fill="#5A3DBF"/>
+ <circle cx="180" cy="150" r="11" fill="#2A2B45"/>
+ <g font-family="Trebuchet MS, Arial" font-weight="900" font-size="20" fill="#2A2B45" text-anchor="middle"><text x="180" y="52">N</text><text x="180" y="262">S</text><text x="84" y="157">W</text><text x="276" y="157">E</text></g></g>
+ <g class="bob d2"><rect x="18" y="226" width="64" height="64" rx="12" fill="#4CC76A" transform="rotate(-10 50 258)"/><circle cx="50" cy="258" r="14" fill="#fff" opacity=".85"/></g>
+ <g class="bob d3"><rect x="262" y="228" width="68" height="56" rx="12" fill="#FFC83D" transform="rotate(8 296 256)"/><polygon points="296,238 312,272 280,272" fill="#fff" opacity=".85"/></g>
+ <g class="bob"><rect x="294" y="40" width="48" height="48" rx="12" fill="#8E6CF0" transform="rotate(14 318 64)"/></g>
+ <g class="bob d2"><circle cx="40" cy="64" r="26" fill="#FF9A3C"/><circle cx="40" cy="64" r="10" fill="#fff" opacity=".85"/></g>
+</svg></div></header>
+<div class="layout"><nav class="rail" aria-label="Steps"><ol><li><a href="#s1"><span class="dot" style="background:var(--coral);">1</span>A starting point</a></li><li><a href="#s2"><span class="dot" style="background:var(--sun);color:var(--ink)">2</span>The whole child</a></li><li><a href="#s3"><span class="dot" style="background:var(--leaf);">3</span>One experience</a></li><li><a href="#s4"><span class="dot" style="background:var(--sky);">4</span>Not everything at once</a></li><li><a href="#s5"><span class="dot" style="background:var(--grape);">5</span>Direction, not checklist</a></li><li><a href="#s6"><span class="dot" style="background:var(--orange);">6</span>Interest to intention</a></li><li><a href="#s7"><span class="dot" style="background:var(--coral);">7</span>One thing I will notice</a></li><li><a href="#words"><span class="dot" style="background:var(--ink)">?</span>Key words</a></li></ol></nav>
+<main id="main">
+
+<section class="lo" aria-labelledby="lo"><h2 id="lo">What you will be able to do<span class="id">Apa yang akan dapat Anda lakukan</span></h2><ol><li>Explain what holistic development means in early childhood education and why areas of development are interconnected.</li><li>Recognise opportunities for multiple aspects of children&rsquo;s development within everyday play, routines, inquiry and learning experiences.</li><li>Use curriculum goals or intentions to develop a clear focus for learning and a lens for observation without fragmenting the child&rsquo;s experience into isolated domains.</li><li>Design or refine an integrated learning experience that intentionally supports multiple aspects of children&rsquo;s development.</li><li>Reflect on how holistic planning can be adapted to their own children, setting, community and curriculum context.</li></ol></section>
+<section class="step s1" id="s1"><span class="num">1</span><span class="time">about 5 min</span><h2>A starting point<span class="id">Titik awal</span></h2><p>When you hear holistic development <span class="k">perkembangan holistik</span>, what does it mean in your practice? Take a minute to think, then write one word or idea.</p><div class="try"><span class="badge">Have a go</span><div class="field"><label for="a1">One word or idea for holistic development in my practice...</label><textarea id="a1" data-key="a1"></textarea></div></div></section><section class="step s2" id="s2"><span class="num">2</span><span class="time">about 15 min</span><h2>Seeing the whole child<span class="id">Melihat anak secara utuh</span></h2><div class="learn"><span class="badge">Build understanding</span><p>We can look at a child through five lenses. They help us think about development; they are <strong>not separate curriculum subjects</strong>.</p><svg class="petals" viewBox="0 0 320 300" role="img" aria-label="A child in the centre surrounded by five connected circles: physical, social and emotional, language and communication, cognitive and creative, values and character">
+<g stroke="#8E6CF0" stroke-width="5" fill="none"><line x1="160" y1="150" x2="160" y2="52"/><line x1="160" y1="150" x2="258" y2="108"/><line x1="160" y1="150" x2="230" y2="236"/><line x1="160" y1="150" x2="90" y2="236"/><line x1="160" y1="150" x2="62" y2="108"/></g>
+<circle cx="160" cy="150" r="38" fill="#FFC83D"/><circle cx="160" cy="142" r="12" fill="#FF9A3C"/><rect x="146" y="154" width="28" height="22" rx="10" fill="#FF6F61"/>
+<g font-family="Trebuchet MS,Arial" font-weight="800" font-size="11" text-anchor="middle" fill="#fff">
+<circle cx="160" cy="46" r="34" fill="#4CC76A"/><text x="160" y="44">Physical</text><text x="160" y="57" font-weight="600" font-size="9">fisik</text>
+<circle cx="262" cy="104" r="40" fill="#FF6F61"/><text x="262" y="97">Social and</text><text x="262" y="110">emotional</text><text x="262" y="122" font-weight="600" font-size="8.5">sosial-emosional</text>
+<circle cx="232" cy="238" r="40" fill="#3FB8F0"/><text x="232" y="231">Language</text><text x="232" y="244">and talk</text><text x="232" y="256" font-weight="600" font-size="9">bahasa</text>
+<circle cx="88" cy="238" r="40" fill="#8E6CF0"/><text x="88" y="231">Thinking</text><text x="88" y="244">and creating</text><text x="88" y="256" font-weight="600" font-size="8.5">kognitif</text><text x="88" y="268" font-weight="600" font-size="8.5">kreativitas</text>
+<circle cx="58" cy="104" r="40" fill="#FF9A3C"/><text x="58" y="97">Values and</text><text x="58" y="110">character</text><text x="58" y="122" font-weight="600" font-size="8.5">nilai, karakter</text></g></svg><div class="cards3"><div class="card" style="--c2:var(--coral)"><h4>Development does not happen in boxes</h4><p>Language develops through relationships. Physical experiences can involve thinking and problem solving. Play involves emotional regulation.</p></div><div class="card" style="--c2:var(--sky)"><h4>Every area shapes the others</h4><p>Each area shapes, and is shaped by, the others.</p></div><div class="card" style="--c2:var(--leaf)"><h4>One child. One experience.</h4><p>One experience can hold many possibilities for learning.</p></div></div></div><div class="try"><span class="badge">Have a go</span><p><strong>Look at this experience.</strong> Which areas of development connect to each thing the children are doing? Choose all that fit.</p><svg class="scene" viewBox="0 0 420 220" role="img" aria-label="Children planning and creating a small garden: one digs, one carries a watering can, one draws a plan">
+<rect width="420" height="220" fill="#DDF3FF"/><rect y="150" width="420" height="70" fill="#8D6E4F"/><ellipse cx="90" cy="150" rx="70" ry="10" fill="#6E5538"/>
+<g><circle cx="80" cy="96" r="16" fill="#FFB27A"/><rect x="66" y="112" width="28" height="40" rx="12" fill="#FF6F61"/><rect x="96" y="120" width="26" height="6" rx="3" fill="#8E6CF0" transform="rotate(30 96 123)"/></g>
+<g><circle cx="190" cy="92" r="16" fill="#E2A06A"/><rect x="176" y="108" width="28" height="42" rx="12" fill="#4CC76A"/><path d="M210 122 h26 l-4 16 h-18z" fill="#3FB8F0"/></g>
+<g><circle cx="300" cy="100" r="16" fill="#FFC9A3"/><rect x="286" y="116" width="28" height="36" rx="12" fill="#FFC83D"/><rect x="318" y="126" width="40" height="28" rx="4" fill="#fff" stroke="#8E6CF0" stroke-width="3"/><path d="M324 146 l8 -10 l8 6 l10 -8" stroke="#4CC76A" stroke-width="3" fill="none"/></g>
+<g fill="#4CC76A"><rect x="50" y="170" width="6" height="22"/><rect x="120" y="172" width="6" height="20"/><rect x="190" y="170" width="6" height="22"/><circle cx="53" cy="168" r="8"/><circle cx="123" cy="170" r="8"/><circle cx="193" cy="168" r="8"/></g></svg><div class="sortitem"><p><strong>Choosing and planning where things will go</strong></p><div class="opts" role="group" aria-label="Garden: Choosing and planning where things will go" data-key="gd0" data-label="Garden: Choosing and planning where things will go" data-opts="Physical (fisik)|Social and emotional (sosial-emosional)|Language and communication (bahasa)|Thinking and creating (kognitif, kreativitas)|Values and character (nilai, karakter)" data-multi="1"></div></div><div class="sortitem"><p><strong>Digging and carrying soil</strong></p><div class="opts" role="group" aria-label="Garden: Digging and carrying soil" data-key="gd1" data-label="Garden: Digging and carrying soil" data-opts="Physical (fisik)|Social and emotional (sosial-emosional)|Language and communication (bahasa)|Thinking and creating (kognitif, kreativitas)|Values and character (nilai, karakter)" data-multi="1"></div></div><div class="sortitem"><p><strong>Measuring the spaces between seeds</strong></p><div class="opts" role="group" aria-label="Garden: Measuring the spaces between seeds" data-key="gd2" data-label="Garden: Measuring the spaces between seeds" data-opts="Physical (fisik)|Social and emotional (sosial-emosional)|Language and communication (bahasa)|Thinking and creating (kognitif, kreativitas)|Values and character (nilai, karakter)" data-multi="1"></div></div><div class="sortitem"><p><strong>Talking about who will do what</strong></p><div class="opts" role="group" aria-label="Garden: Talking about who will do what" data-key="gd3" data-label="Garden: Talking about who will do what" data-opts="Physical (fisik)|Social and emotional (sosial-emosional)|Language and communication (bahasa)|Thinking and creating (kognitif, kreativitas)|Values and character (nilai, karakter)" data-multi="1"></div></div><div class="sortitem"><p><strong>Watering and waiting for things to grow</strong></p><div class="opts" role="group" aria-label="Garden: Watering and waiting for things to grow" data-key="gd4" data-label="Garden: Watering and waiting for things to grow" data-opts="Physical (fisik)|Social and emotional (sosial-emosional)|Language and communication (bahasa)|Thinking and creating (kognitif, kreativitas)|Values and character (nilai, karakter)" data-multi="1"></div></div><div class="sortitem"><p><strong>Drawing what the garden might look like</strong></p><div class="opts" role="group" aria-label="Garden: Drawing what the garden might look like" data-key="gd5" data-label="Garden: Drawing what the garden might look like" data-opts="Physical (fisik)|Social and emotional (sosial-emosional)|Language and communication (bahasa)|Thinking and creating (kognitif, kreativitas)|Values and character (nilai, karakter)" data-multi="1"></div></div><details><summary style="cursor:pointer;font-weight:800;color:var(--grape-d)">Compare with some ideas</summary><p style="margin-top:.6rem">Most actions touch several areas at once. For example, planning where things go involves language, problem solving and negotiating with others. Watering and waiting involves responsibility and care, patience, and early scientific thinking. There is no single right answer.</p></details></div></section><section class="step s3" id="s3"><span class="num">3</span><span class="time">about 20 min</span><h2>One experience, many possibilities<span class="id">Satu pengalaman, banyak kemungkinan</span></h2><p>Now think about the whole garden experience.</p><div class="try"><span class="badge">Have a go</span><div class="field"><label for="g1">What learning can you see? (Not what the children are doing, but what they might be learning.)</label><textarea id="g1" data-key="g1"></textarea></div></div><div class="learn"><span class="badge">Build understanding</span><p><strong>One experience, interconnected learning:</strong> communication, creativity, problem solving, responsibility and care, mathematical and scientific thinking, collaboration and self-regulation, and physical coordination.</p><p><strong>And what is the educator doing?</strong> Choosing, listening, noticing, questioning, providing, extending, revisiting.</p><div class="quote">Child-centred does not mean educator-passive. Intentional teaching is active, thoughtful and responsive.</div></div><div class="try"><span class="badge">Have a go</span><div class="field"><label for="g2">Where did you see (or could you imagine) the educator being intentional in this experience?</label><textarea id="g2" data-key="g2"></textarea></div></div></section><section class="step s4" id="s4"><span class="num">4</span><span class="time">about 10 min</span><h2>Holistic does not mean everything at once<span class="id">Holistik tidak berarti semuanya sekaligus</span></h2><div class="learn"><span class="badge">Build understanding</span><div class="two"><div class="card" style="--c2:var(--coral)"><h4>Not this</h4><p>Artificially ticking every box. Attaching every developmental area to an activity so the plan looks &ldquo;complete&rdquo;.</p></div><div class="card" style="--c2:var(--leaf)"><h4>But this</h4><p>Planning with intention. Focusing deliberately on the learning that matters, while staying open to the connected learning that emerges.</p></div></div></div><div class="try"><span class="badge">Have a go</span><p><strong>Which of these plans falls into the trap?</strong></p><div class="sortitem"><p><strong>Plan A.</strong> The plan lists five activities, one for each area: literacy, mathematics, science, art and social-emotional.</p><div class="opts" role="group" aria-label="Plan A: checklist or holistic thinking" data-key="tr0" data-label="Plan A: checklist or holistic thinking" data-opts="Checklist thinking|Holistic thinking"></div></div><div class="sortitem"><p><strong>Plan B.</strong> Children plan and create a small garden. The educator listens, asks questions and notes what the children try.</p><div class="opts" role="group" aria-label="Plan B: checklist or holistic thinking" data-key="tr1" data-label="Plan B: checklist or holistic thinking" data-opts="Checklist thinking|Holistic thinking"></div></div><div class="sortitem"><p><strong>Plan C.</strong> A garden activity has a tick-sheet attached: &ldquo;Have I covered every developmental area?&rdquo;</p><div class="opts" role="group" aria-label="Plan C: checklist or holistic thinking" data-key="tr2" data-label="Plan C: checklist or holistic thinking" data-opts="Checklist thinking|Holistic thinking"></div></div><details><summary style="cursor:pointer;font-weight:800;color:var(--grape-d)">Compare with some ideas</summary><p style="margin-top:.6rem">Plans A and C are checklist thinking: they start from areas to cover. Plan B is holistic thinking: it starts from the children and notices interconnected learning as it happens. &ldquo;Have I covered every developmental area?&rdquo; is not the question to ask.</p></details></div></section><section class="step s5" id="s5"><span class="num">5</span><span class="time">about 10 min</span><h2>Direction, not a checklist<span class="id">Arah, bukan daftar centang</span></h2><div class="learn"><span class="badge">Build understanding</span><p>The curriculum is a compass <span class="k">kompas</span>, not a checklist. It gives <strong>direction</strong>: a curriculum intention.</p><div class="two"><div class="card" style="--c2:var(--coral)"><h4>Checklist thinking</h4><ul><li>Starts with outcomes to tick off</li><li>Plans activities to &ldquo;cover&rdquo; each area</li><li>Success = everything covered</li><li>Children fit around the plan</li></ul></div><div class="card" style="--c2:var(--leaf)"><h4>Holistic thinking</h4><ul><li>Starts with the children and a curriculum intention</li><li>Plans meaningful experiences</li><li>Notices interconnected learning as it happens</li><li>The plan responds to children</li></ul></div></div></div><div class="try"><span class="badge">Have a go</span><p><strong>Choose one goal or intention from your own curriculum</strong> and write it in your own words.</p><div class="field"><label for="c1">A curriculum goal or intention from my own curriculum, in my own words...</label><textarea id="c1" data-key="c1"></textarea></div></div></section><section class="step s6" id="s6"><span class="num">6</span><span class="time">about 25 min</span><h2>From interest to intention to experience<span class="id">Dari minat ke tujuan ke pengalaman</span></h2><div class="learn"><span class="badge">Build understanding</span><p>Planning moves through three questions: <strong>Know and notice</strong> (What do I know about, or have I noticed about, the children?), <strong>Intention</strong> (What learning might I intentionally support?), and <strong>Experience</strong> (What experience or environment could enable it?).</p><div class="quote">A worked example: Children keep crowding around ants on the playground. <br>What might I want them to explore or develop? To investigate, notice and talk about what they see. <br>What could make this meaningful? It starts from their own interest. <br>Where are the choices? Children decide what to look at, how to record it and what to ask next.</div></div><div class="try"><span class="badge">Have a go</span><p><strong>Now apply it to your own setting.</strong> Choose ONE familiar experience and jot down:</p><div class="field"><label for="p1">The learning intention...</label><textarea id="p1" data-key="p1"></textarea></div><div class="field"><label for="p2">What children might do...</label><textarea id="p2" data-key="p2"></textarea></div><div class="field"><label for="p3">At least three interconnected aspects of development this could support...</label><textarea id="p3" data-key="p3"></textarea></div><p style="font-size:.95rem">Take about 8 to 10 minutes. Keep it short and real.</p></div></section><section class="step s7" id="s7"><span class="num">7</span><span class="time">about 5 min</span><h2>One thing I will notice differently<span class="id">Satu hal yang akan saya perhatikan secara berbeda</span></h2><div class="learn"><span class="badge">Build understanding</span><div class="quote">Holistic planning is not about adding more to the plan. It is about recognising and intentionally supporting the interconnected learning possible within meaningful experiences.</div></div><div class="try"><span class="badge">Have a go</span><div class="field"><label for="x1">One thing I will notice differently in my planning is...</label><textarea id="x1" data-key="x1"></textarea></div><div class="tools"><button type="button" class="btn primary" data-export>Download my responses</button><span class="status">Your answers are saved on this device only. The download includes all of them. / Jawaban Anda tersimpan di perangkat ini.</span></div></div></section>
+<section class="lo" id="words" style="border-color:var(--grape);box-shadow:0 8px 0 var(--grape-d)"><h2 style="color:var(--grape-d)">Key words<span class="id">Kata kunci</span></h2><dl class="words"><div><dt>Holistic</dt><dd><em>Holistik</em></dd></div><div><dt>Integrated</dt><dd><em>Terpadu</em></dd></div><div><dt>Curriculum</dt><dd><em>Kurikulum</em></dd></div><div><dt>Compass</dt><dd><em>Kompas</em></dd></div><div><dt>Learning objective</dt><dd><em>Tujuan pembelajaran</em></dd></div><div><dt>Intention</dt><dd><em>Maksud / tujuan</em></dd></div><div><dt>Observation</dt><dd><em>Observasi</em></dd></div><div><dt>Child-centred</dt><dd><em>Berpusat pada anak</em></dd></div><div><dt>Physical development</dt><dd><em>Perkembangan fisik</em></dd></div><div><dt>Language and communication</dt><dd><em>Bahasa dan komunikasi</em></dd></div><div><dt>Values and character</dt><dd><em>Nilai dan karakter</em></dd></div></dl><p style="font-size:.95rem;color:var(--muted)">A fuller glossary is on the programme page.</p></section>
+<section class="lo" style="border-color:var(--sky);box-shadow:0 8px 0 var(--sky-d)"><h2 style="color:var(--sky-d)">References</h2><p style="font-size:.95rem">Cross, E. (2026). <em>Module 3: Planning for Holistic Foundational Development. Facilitator brief.</em></p><p style="font-size:.95rem">Murcia, K., &amp; Cross, E. (2021). Participant planning tool.</p><p style="font-size:.95rem">Badan Standar, Kurikulum, dan Asesmen Pendidikan. (2025). <em>Panduan pembelajaran dan asesmen</em> (edisi revisi). Kementerian Pendidikan Dasar dan Menengah.</p></section>
+</main></div>
+<footer class="footer"><div class="footer-inner">Curtin University School of Education &times; Direktorat Guru PAUD dan PNF, Kementerian Pendidikan Dasar dan Menengah, Republik Indonesia</div></footer>
+<script>
+(function(){
+  var P='ecem2:';
+
+  function get(k){try{return localStorage.getItem(P+k)}catch(e){return null}}
+  function set(k,v){try{localStorage.setItem(P+k,v)}catch(e){}}
+  function norm(s){return s.replace(/\s+/g,' ').trim()}
+  function $(id){return document.getElementById(id)}
+  var bar=document.querySelector('#progress span');
+  function prog(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;if(bar)bar.style.width=(m>0?h.scrollTop/m*100:0)+'%'}
+  addEventListener('scroll',prog,{passive:true});prog();
+
+  document.querySelectorAll('textarea[data-key],input.tx[data-key]').forEach(function(t){var v=get(t.dataset.key);if(v)t.value=v;t.addEventListener('input',function(){set(t.dataset.key,t.value)})});
+  document.querySelectorAll('.opts[data-opts]').forEach(function(g){
+    var key=g.dataset.key,multi=!!g.dataset.multi,cur=get(key),sel=[];
+    if(multi){try{sel=JSON.parse(cur||'[]')}catch(e){}}
+    g.dataset.opts.split('|').forEach(function(o){var b=document.createElement('button');b.type='button';b.className=multi?'chip':'opt';
+      var cls=g.dataset.cls||''; if(cls){var m={'Green':'g','Amber':'a','Red':'r'}[o]; if(m)b.classList.add(m)}
+      b.textContent=o;b.setAttribute('aria-pressed',String(multi?sel.indexOf(o)>-1:cur===o));
+      b.addEventListener('click',function(){
+        if(multi){var on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',String(on));var l=[];g.querySelectorAll('.chip').forEach(function(x){if(x.getAttribute('aria-pressed')==='true')l.push(x.textContent)});set(key,JSON.stringify(l))}
+        else{g.querySelectorAll('.opt').forEach(function(x){x.setAttribute('aria-pressed','false')});b.setAttribute('aria-pressed','true');set(key,o)}});
+      g.appendChild(b)});
+  });
+  var NONE='(no response)';
+  function labelFor(el){if(el.dataset.label)return el.dataset.label;if(el.id){var l=document.querySelector('label[for="'+el.id+'"]');if(l)return norm(l.textContent)}return el.getAttribute('aria-label')||''}
+  function collect(){
+    var o=['Module 2: Planning for Holistic Foundational Development','My responses (online preparation)',''];
+    document.querySelectorAll('main .step').forEach(function(sec){
+      var h=sec.querySelector('h2');o.push(sec.id.replace('s','')+'. '+norm(h.firstChild.textContent).toUpperCase());
+      sec.querySelectorAll('[data-key]').forEach(function(el){
+        var lab=labelFor(el),ans;
+        if(el.dataset.from){var src=document.getElementById(el.dataset.from);lab+=' ('+((src&&src.value.trim())||'method not named')+')'}
+        if(el.tagName==='TEXTAREA'||el.tagName==='INPUT')ans=el.value.trim();
+        else if(el.classList.contains('opts')){var v=get(el.dataset.key);if(el.dataset.multi){try{v=JSON.parse(v||'[]').join(', ')}catch(e){v=''}}ans=v}
+        else return;
+        o.push(lab,'  '+(ans||NONE));
+      });o.push('');
+    });return o.join('\n');
+  }
+  document.querySelectorAll('[data-export]').forEach(function(b){b.addEventListener('click',function(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([collect()],{type:'text/plain'}));a.download='my-responses-module-2.txt';document.body.appendChild(a);a.click();a.remove()})});
+  var links=[].slice.call(document.querySelectorAll('.rail a')),secs=links.map(function(a){return document.querySelector(a.getAttribute('href'))});
+  function track(){var y=innerHeight*0.4,idx=0;secs.forEach(function(s,i){if(s.getBoundingClientRect().top<=y)idx=i});if(innerHeight+scrollY>=document.body.scrollHeight-4)idx=secs.length-1;
+    links.forEach(function(a,i){var li=a.parentNode;li.classList.toggle('is-current',i===idx);li.classList.toggle('is-done',i<idx);if(i===idx)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current')})}
+  addEventListener('scroll',track,{passive:true});addEventListener('resize',track);track();
+})();
+</script>
+</body>
+</html>

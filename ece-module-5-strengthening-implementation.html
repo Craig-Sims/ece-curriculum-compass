@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 5: Strengthening Curriculum Implementation (draft)</title>
+<style>
+:root{
+  --sun:#FFC83D; --sun-d:#B87F00; --coral:#FF6F61; --coral-d:#C33B2E; --sky:#3FB8F0; --sky-d:#0B6FA3;
+  --leaf:#4CC76A; --leaf-d:#1B7F3A; --grape:#8E6CF0; --grape-d:#5A3DBF; --orange:#FF9A3C; --orange-d:#A85500;
+  --ink:#2A2B45; --muted:#58597A; --cream:#FFF8E8; --white:#fff;
+  --round:ui-rounded,"SF Pro Rounded","Avenir Next Rounded","Trebuchet MS","Segoe UI",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);background-image:radial-gradient(rgba(142,108,240,.10) 2px,transparent 2px);background-size:26px 26px;color:var(--ink);font-family:var(--round);font-size:1.125rem;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--grape-d)}
+:focus-visible{outline:4px solid var(--grape);outline-offset:3px;border-radius:10px}
+.skip{position:absolute;left:-999px;top:0;background:#fff;color:var(--ink);padding:.7rem 1rem;z-index:100}.skip:focus{left:.5rem;top:.5rem}
+#progress{position:fixed;top:0;left:0;right:0;height:8px;background:rgba(255,255,255,.7);z-index:50}
+#progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--coral),var(--sun),var(--leaf),var(--sky),var(--grape));border-radius:0 6px 6px 0}
+/* hero */
+.hero{position:relative;overflow:hidden;background:var(--herobg,var(--sky));color:#fff;border-bottom:10px solid var(--sun)}
+.hero-inner{max-width:76rem;margin:0 auto;padding:4.5rem 1.5rem 4rem;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:2rem;align-items:center;position:relative;z-index:2}
+.hero h1{font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.08;margin:0 0 .6rem;font-weight:900;letter-spacing:-.01em;text-shadow:0 3px 0 rgba(0,0,0,.14)}
+.hero .id-title{font-size:clamp(1.15rem,2.4vw,1.6rem);font-weight:800;color:#FFF3B8;margin:0 0 1rem;font-style:italic}
+.hero p{margin:.4rem 0;font-size:1.15rem;max-width:40rem}
+.hero .tag{display:inline-block;background:#fff;color:var(--sky-d);font-weight:800;border-radius:999px;padding:.25rem .9rem;margin:0 0 1rem;font-size:.95rem}
+.hero svg{width:100%;height:auto;max-width:24rem;justify-self:center;display:block}
+.blob{position:absolute;border-radius:50%;opacity:.9;z-index:1}
+.blob.b1{width:14rem;height:14rem;background:var(--coral);left:-5rem;bottom:-6rem}
+.blob.b2{width:9rem;height:9rem;background:var(--sun);right:30%;top:-4rem}
+.blob.b3{width:7rem;height:7rem;background:var(--leaf);right:-2rem;bottom:2rem}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.bob{animation:bob 4s ease-in-out infinite}.bob.d2{animation-delay:.8s}.bob.d3{animation-delay:1.6s}
+/* layout */
+.layout{max-width:76rem;margin:0 auto;padding:2.5rem 1.5rem 5rem;display:grid;grid-template-columns:13rem minmax(0,1fr);gap:2.5rem}
+.rail{position:sticky;top:1.2rem;align-self:start}
+.rail ol{list-style:none;margin:0;padding:0}
+.rail li{margin:0 0 .5rem}
+.rail a{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--muted);font-weight:800;font-size:.95rem;line-height:1.25}
+.rail .dot{flex:0 0 1.9rem;width:1.9rem;height:1.9rem;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:.85rem;border:3px solid #fff;box-shadow:0 3px 0 rgba(0,0,0,.12)}
+.rail li.is-current a{color:var(--ink)}.rail li.is-current .dot{transform:scale(1.2)}
+.rail li.is-done .dot{opacity:.75}
+main{min-width:0}
+h2{font-size:clamp(1.55rem,3vw,2.1rem);line-height:1.2;margin:0 0 .3rem;font-weight:900}
+h3{font-size:1.25rem;margin:1.6rem 0 .5rem;font-weight:800}
+h2 .id,h3 .id{display:block;font-size:1rem;font-weight:700;font-style:italic;color:var(--muted);margin-top:.15rem}
+p{max-width:46rem;margin:0 0 1rem}
+.id{font-style:italic}
+.k{display:inline-block;background:#EDE6FF;color:var(--grape-d);border-radius:999px;padding:0 .6em;font-style:italic;font-weight:700;font-size:.92em;white-space:nowrap}
+.step{background:#fff;border:5px solid var(--c);border-radius:28px;padding:1.6rem 1.7rem 1.8rem;margin:0 0 2.2rem;box-shadow:0 8px 0 var(--cd);position:relative}
+.step>.num{position:absolute;top:-1.5rem;left:1.4rem;width:3rem;height:3rem;border-radius:50%;background:var(--c);color:#fff;font-weight:900;font-size:1.4rem;display:grid;place-items:center;border:4px solid #fff;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+.step>.time{position:absolute;top:-1rem;right:1.4rem;background:var(--c);color:#fff;border-radius:999px;padding:.15rem .9rem;font-weight:800;font-size:.9rem}
+.step h2{color:var(--cd);margin-top:.6rem}
+.s1{--c:var(--coral);--cd:var(--coral-d)}.s2{--c:var(--sun);--cd:var(--sun-d)}.s3{--c:var(--leaf);--cd:var(--leaf-d)}.s4{--c:var(--sky);--cd:var(--sky-d)}.s5{--c:var(--grape);--cd:var(--grape-d)}.s6{--c:var(--orange);--cd:var(--orange-d)}.s7{--c:var(--coral);--cd:var(--coral-d)}
+.s2 .num{color:var(--ink)}.s2 .time{color:var(--ink)}
+.try{background:#FFF3C2;border:4px dashed var(--sun);border-radius:22px;padding:1.1rem 1.3rem;margin:1.1rem 0}
+.try .badge,.learn .badge{display:inline-block;font-weight:900;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:.1rem .8rem;margin-bottom:.5rem}
+.try .badge{background:var(--sun);color:var(--ink)}
+.learn{background:#E4F5FF;border:4px solid var(--sky);border-radius:22px;padding:1.1rem 1.3rem;margin:1.1rem 0}
+.learn .badge{background:var(--sky);color:#fff}
+.quote{border-left:8px solid var(--grape);background:#F3EEFF;border-radius:0 20px 20px 0;padding:.9rem 1.3rem;margin:1rem 0;font-weight:700}
+.field{margin:0 0 1rem}
+.field label{display:block;font-weight:800;margin:0 0 .35rem;color:var(--ink)}
+textarea{width:100%;min-height:5.5rem;font:inherit;padding:.7rem .9rem;border:4px solid #D9D2EE;border-radius:18px;background:#fff;color:var(--ink);resize:vertical}
+textarea:focus{border-color:var(--grape);outline:none;box-shadow:0 0 0 4px rgba(142,108,240,.25)}
+.opts{display:flex;flex-wrap:wrap;gap:.6rem;margin:.4rem 0 .6rem}
+.opt,.btn,.chip{font:inherit;font-weight:800;border:4px solid var(--grape);background:#fff;color:var(--grape-d);border-radius:999px;padding:.4rem 1.1rem;cursor:pointer;box-shadow:0 4px 0 var(--grape-d)}
+.opt:hover,.btn:hover,.chip:hover{transform:translateY(-1px)}
+.opt:active,.btn:active,.chip:active{transform:translateY(3px);box-shadow:0 1px 0 var(--grape-d)}
+.opt[aria-pressed="true"],.chip[aria-pressed="true"]{background:var(--grape);color:#fff}
+.btn.primary{background:var(--leaf);border-color:var(--leaf-d);color:#fff;box-shadow:0 4px 0 var(--leaf-d)}
+.chip{padding:.3rem .95rem}
+.sortitem{background:#fff;border:4px solid #E4DDF7;border-radius:20px;padding:.8rem 1.1rem;margin:0 0 .8rem}
+.sortitem p{margin:0 0 .4rem}
+.fb{margin:.4rem 0 0;padding:.5rem .9rem;border-radius:14px;font-size:1rem;background:#EAFBEF;border:3px solid var(--leaf);display:none}
+.fb.show{display:block}.fb.no{background:#FFF1E0;border-color:var(--orange)}
+.layers{display:grid;gap:.5rem;margin:1rem 0}
+.layers div{border-radius:16px;padding:.6rem 1rem;color:#fff;font-weight:800}
+.l1{background:var(--grape);width:100%}.l2{background:var(--sky);width:88%}.l3{background:var(--leaf-d);width:76%}.l4{background:var(--coral);width:64%}
+.layers small{display:block;font-weight:600;opacity:.95}
+.cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1rem 0}
+.card{background:#fff;border:4px solid var(--c2,#D9D2EE);border-radius:20px;padding:.9rem 1rem}
+.card h4{margin:0 0 .3rem;font-size:1.1rem}.card p{margin:0;font-size:1rem}
+.panels{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin:1rem 0}
+.panels figure{margin:0;background:#fff;border:4px solid var(--sky);border-radius:20px;overflow:hidden}
+.panels figcaption{padding:.5rem .8rem;font-size:.95rem;font-weight:700}
+.panels svg{display:block;width:100%;height:auto}
+.draft{background:#FFE9C7;border:3px dashed var(--orange-d);border-radius:16px;padding:.7rem 1rem;margin:1rem 0;font-size:.95rem}
+.draft p{margin:0;max-width:none}.draft strong{color:var(--orange-d)}
+.tools{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;margin-top:1rem}.status{font-size:.95rem;color:var(--muted)}
+.lo{background:#fff;border:5px solid var(--leaf);border-radius:28px;padding:1.3rem 1.6rem;margin:0 0 2.4rem;box-shadow:0 8px 0 var(--leaf-d)}
+.lo h2{color:var(--leaf-d)}.lo ol{padding-left:1.4rem;margin:.5rem 0 0}.lo li{margin-bottom:.4rem}
+.words{columns:2;column-gap:2rem}.words div{break-inside:avoid;margin:0 0 .7rem}
+.words dt{font-weight:900}.words dd{margin:0;color:var(--muted)}
+.footer{border-top:6px solid var(--sun);background:#fff;padding:1.6rem 1.5rem 2.3rem;color:var(--muted);font-size:.95rem}
+.footer-inner{max-width:76rem;margin:0 auto}
+@media(max-width:60rem){.hero-inner{grid-template-columns:1fr}.hero svg{max-width:14rem;justify-self:start}.layout{grid-template-columns:1fr}.rail{display:none}.cards3,.panels{grid-template-columns:1fr}.words{columns:1}}
+@media(prefers-reduced-motion:reduce){.bob{animation:none}html{scroll-behavior:auto}.opt,.btn,.chip{transition:none}}
+
+.opts[data-multi] .chip{padding:.3rem .95rem}
+input[type=text].tx{width:100%;font:inherit;padding:.55rem .9rem;border:4px solid #D9D2EE;border-radius:999px;background:#fff;color:var(--ink)}
+input[type=text].tx:focus{border-color:var(--grape);outline:none;box-shadow:0 0 0 4px rgba(142,108,240,.25)}
+.light{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem .8rem;align-items:center;background:#fff;border:4px solid #E4DDF7;border-radius:20px;padding:.7rem 1rem;margin:0 0 .7rem}
+.light .opts{margin:0;flex-wrap:nowrap;gap:.3rem}.light .opts .opt{padding:.15rem .45rem;font-size:.82rem;border-width:3px;box-shadow:0 3px 0 var(--grape-d)}
+.light>div:first-child{grid-column:1/-1}.light small{display:block;font-weight:800;color:var(--muted);font-size:.8rem}
+.opt.g[aria-pressed="true"]{background:var(--leaf);border-color:var(--leaf-d);color:#fff}
+.opt.a[aria-pressed="true"]{background:var(--sun);border-color:var(--sun-d);color:var(--ink)}
+.opt.r[aria-pressed="true"]{background:var(--coral);border-color:var(--coral-d);color:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+.two .card ul{margin:.3rem 0 0;padding-left:1.2rem}
+.petals{display:block;margin:0 auto;max-width:22rem;width:100%;height:auto}
+.scene{display:block;margin:1rem auto;max-width:34rem;width:100%;height:auto;border:4px solid var(--sky);border-radius:22px;background:#fff}
+@media(max-width:60rem){.light{grid-template-columns:1fr}.two{grid-template-columns:1fr}}
+.tw{overflow-x:auto;margin:.5rem 0}
+table.tbl{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:4px solid var(--grape);border-radius:18px;overflow:hidden;font-size:.95rem}
+table.tbl.wide{min-width:46rem}
+table.tbl th{background:var(--grape);color:#fff;text-align:left;padding:.5rem .7rem;font-size:.9rem}
+table.tbl td{padding:.4rem;vertical-align:top;border-top:2px solid #EFEAFB}
+table.tbl textarea{min-height:7rem;border-width:3px;border-radius:12px;padding:.5rem .6rem;font-size:.95rem}
+.btn.small{font-size:.9rem;padding:.2rem .9rem;margin:.5rem 0 0;border-width:3px}
+.datalist{background:#fff;border:4px solid var(--leaf);border-radius:18px;padding:.7rem 1rem;margin:.8rem 0 0}
+.datalist ul{margin:.3rem 0 0;padding-left:1.2rem}.datalist li.none{color:var(--muted);list-style:none;margin-left:-1.2rem}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a><div id="progress" aria-hidden="true"><span></span></div>
+<header class="hero" style="--herobg:#C33B2E"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+ <div class="hero-inner"><div>
+  <span class="tag" style="color:#C33B2E">Module 5</span>
+  <h1>Strengthening Curriculum Implementation</h1><p class="id-title">Memperkuat Pelaksanaan Kurikulum</p>
+  <p>Curriculum as a Compass for Learning in Early Childhood Education. <em>Kurikulum sebagai Kompas Pembelajaran di PAUD.</em></p>
+  <p style="font-size:1rem">Designed by Dr Tamara Bromley. Online preparation, about 90 minutes.</p>
+ </div><svg viewBox="0 0 360 330" role="img" aria-label="A compass surrounded by colourful building blocks">
+ <g class="bob"><circle cx="180" cy="150" r="104" fill="#fff"/><circle cx="180" cy="150" r="88" fill="#FFF3B8" stroke="#FF6F61" stroke-width="8"/>
+ <polygon points="180,66 198,150 180,150" fill="#FF6F61"/><polygon points="180,66 162,150 180,150" fill="#C33B2E"/>
+ <polygon points="180,234 198,150 180,150" fill="#8E6CF0"/><polygon points="180,234 162,150 180,150" fill="#5A3DBF"/>
+ <circle cx="180" cy="150" r="11" fill="#2A2B45"/>
+ <g font-family="Trebuchet MS, Arial" font-weight="900" font-size="20" fill="#2A2B45" text-anchor="middle"><text x="180" y="52">N</text><text x="180" y="262">S</text><text x="84" y="157">W</text><text x="276" y="157">E</text></g></g>
+ <g class="bob d2"><rect x="18" y="226" width="64" height="64" rx="12" fill="#4CC76A" transform="rotate(-10 50 258)"/><circle cx="50" cy="258" r="14" fill="#fff" opacity=".85"/></g>
+ <g class="bob d3"><rect x="262" y="228" width="68" height="56" rx="12" fill="#FFC83D" transform="rotate(8 296 256)"/><polygon points="296,238 312,272 280,272" fill="#fff" opacity=".85"/></g>
+ <g class="bob"><rect x="294" y="40" width="48" height="48" rx="12" fill="#8E6CF0" transform="rotate(14 318 64)"/></g>
+ <g class="bob d2"><circle cx="40" cy="64" r="26" fill="#FF9A3C"/><circle cx="40" cy="64" r="10" fill="#fff" opacity=".85"/></g>
+</svg></div></header>
+<div class="layout"><nav class="rail" aria-label="Steps"><ol><li><a href="#s1"><span class="dot" style="background:var(--coral);">1</span>Evaluate the effectiveness</a></li><li><a href="#s2"><span class="dot" style="background:var(--sun);color:var(--ink)">2</span>Goal setting</a></li><li><a href="#s3"><span class="dot" style="background:var(--leaf);">3</span>Bring it to the session</a></li><li><a href="#words"><span class="dot" style="background:var(--ink)">?</span>Key words</a></li></ol></nav>
+<main id="main">
+
+<section class="lo" aria-labelledby="lo"><h2 id="lo">What you will be able to do<span class="id">Apa yang akan dapat Anda lakukan</span></h2><ol><li>Reflect upon and evaluate the effectiveness of curriculum implementation in your setting, drawing on a variety of evidence</li><li>Identify barriers and opportunities to strengthen curriculum implementation in your setting</li><li>Explain the notion of quality as it applies in your setting, and how strengthening curriculum implementation is part of increasing quality.</li><li>Describe importance of reflective practices to support quality improvement planning to strengthen curriculum implementation</li><li>Produce a realistic action plan to increase quality and strengthen curriculum implementation</li></ol></section>
+<section class="step s1" id="s1"><span class="num">1</span><span class="time">about 60 min</span><h2>Evaluate the effectiveness of use of the curriculum in my setting<span class="id">Mengevaluasi efektivitas penggunaan kurikulum di tempat saya</span></h2><p>Before you can strengthen curriculum implementation, you need to spend some time evaluating the effectiveness of what is happening now.</p><p>Ask yourself: How effective is the implementation of the curriculum in my setting now?</p><p>Let&rsquo;s start with the children&rsquo;s learning.</p><div class="try"><span class="badge">Have a go</span><div class="field"><label for="cl1">Use the box below to write a short statement about the results that show children&rsquo;s learning in your setting:</label><textarea id="cl1" data-key="cl1" data-label="Short statement about the results that show children's learning in my setting"></textarea></div></div><p>This module is about strengthening curriculum implementation with the aim to improve these results.</p><p>However, to strengthen curriculum implementation, we need to address what the lead up to these results. We need to look at the whole process of curriculum implementation - planning, teaching and assessing ie teaching cycle.</p><svg class="petals" viewBox="0 0 320 250" role="img" aria-label="A cycle of three steps with arrows in a circle: planning, teaching, assessing, then back to planning">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="3.6" markerHeight="3.6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#5A3DBF"/></marker></defs>
+<g fill="none" stroke="#8E6CF0" stroke-width="6" stroke-linecap="round"><path d="M196 50 A112 82 0 0 1 258 140" marker-end="url(#ah)"/><path d="M226 214 A112 82 0 0 1 94 214" marker-end="url(#ah)"/><path d="M62 140 A112 82 0 0 1 124 50" marker-end="url(#ah)"/></g>
+<g font-family="Trebuchet MS,Arial" font-weight="800" font-size="14" text-anchor="middle" fill="#fff">
+<circle cx="160" cy="44" r="36" fill="#FF6F61"/><text x="160" y="49">Planning</text>
+<circle cx="262" cy="180" r="36" fill="#4CC76A"/><text x="262" y="185">Teaching</text>
+<circle cx="58" cy="180" r="36" fill="#3FB8F0"/><text x="58" y="185">Assessing</text></g></svg><p>Let&rsquo;s reflect on the curriculum implementation process in your setting. For each of the stages of the teaching cycle, think about and make some notes on &lsquo;what is happening now&rsquo;?</p><div class="try"><span class="badge">Have a go</span><div class="field"><label for="wn_p">Planning: what is happening now?</label><textarea id="wn_p" data-key="wn_p" data-label="Planning: what is happening now"></textarea></div><div class="field"><label for="wn_t">Teaching: what is happening now?</label><textarea id="wn_t" data-key="wn_t" data-label="Teaching: what is happening now"></textarea></div><div class="field"><label for="wn_a">Assessing: what is happening now?</label><textarea id="wn_a" data-key="wn_a" data-label="Assessing: what is happening now"></textarea></div></div><h3>Build the data set</h3><p>Well done, you have begun to collect information, or &lsquo;data&rsquo;, that will inform your evaluation of the implementation of curriculum in your setting. We have done an important step in strengthening curriculum implementation.</p><p>Let us continue to build the information or data set. Look at these below. Which ones do you think would be useful to provide further information on &lsquo;what is happening now&rsquo; in each planning, teaching and assessing?</p><div class="try"><span class="badge">Have a go</span><div class="opts" role="group" aria-label="Data and information I think would be useful" data-key="datasrc" data-label="Data and information I think would be useful" data-opts="Observation notes (catatan observasi)|Planning documents (dokumen perencanaan)|Children's work samples (hasil karya anak)|Photos (foto)|Family feedback (umpan balik keluarga)|Assessment records (catatan asesmen)|Colleague feedback (masukan rekan)" data-multi="1"></div><div class="datalist" aria-live="polite"><strong>My list so far</strong><ul id="datalist"><li class="none">Choose from the options above and they will appear here.</li></ul></div></div><div class="try"><span class="badge">Have a go</span><div class="field"><label for="en1">Is this &lsquo;data&rsquo; and information enough? Why/ why not?</label><textarea id="en1" data-key="en1" data-label="Is this data and information enough? Why/why not?"></textarea></div><div class="field"><label for="en2">What other &lsquo;data&rsquo; or information would be useful that you have in your setting that is not listed here?</label><textarea id="en2" data-key="en2" data-label="What other data or information would be useful that is not listed"></textarea></div></div><h3>Review with your data</h3><p>Review your &lsquo;what is happening now&rsquo; in each planning, teaching and assessing above? Copy and paste it below and then add what data has informed this. Include the extra information from above.</p><div class="try"><span class="badge">Have a go</span><h4 style="margin:1.2rem 0 .4rem">Planning <span class="k">perencanaan</span></h4><div class="tw"><table class="tbl"><thead><tr><th>What is happening now? (copy and paste from above, add more if you want)</th><th>How did I know? What &lsquo;data&rsquo; did I use?</th></tr></thead><tbody><tr><td><textarea id="t2pa" data-key="t2pa" data-label="Planning: what is happening now? (first table)" aria-label="Planning: what is happening now? (first table)" data-noexport="1"></textarea></td><td><textarea id="t2pb" data-key="t2pb" data-label="Planning: how did I know? (first table)" aria-label="Planning: how did I know? (first table)" data-noexport="1"></textarea></td></tr></tbody></table></div><button type="button" class="btn small" data-copy="wn_p>t2pa">Copy what I wrote above</button><h4 style="margin:1.2rem 0 .4rem">Teaching <span class="k">pembelajaran</span></h4><div class="tw"><table class="tbl"><thead><tr><th>What is happening now? (copy and paste from above, add more if you want)</th><th>How did I know? What &lsquo;data&rsquo; did I use?</th></tr></thead><tbody><tr><td><textarea id="t2ta" data-key="t2ta" data-label="Teaching: what is happening now? (first table)" aria-label="Teaching: what is happening now? (first table)" data-noexport="1"></textarea></td><td><textarea id="t2tb" data-key="t2tb" data-label="Teaching: how did I know? (first table)" aria-label="Teaching: how did I know? (first table)" data-noexport="1"></textarea></td></tr></tbody></table></div><button type="button" class="btn small" data-copy="wn_t>t2ta">Copy what I wrote above</button><h4 style="margin:1.2rem 0 .4rem">Assessing <span class="k">asesmen</span></h4><div class="tw"><table class="tbl"><thead><tr><th>What is happening now? (copy and paste from above, add more if you want)</th><th>How did I know? What &lsquo;data&rsquo; did I use?</th></tr></thead><tbody><tr><td><textarea id="t2aa" data-key="t2aa" data-label="Assessing: what is happening now? (first table)" aria-label="Assessing: what is happening now? (first table)" data-noexport="1"></textarea></td><td><textarea id="t2ab" data-key="t2ab" data-label="Assessing: how did I know? (first table)" aria-label="Assessing: how did I know? (first table)" data-noexport="1"></textarea></td></tr></tbody></table></div><button type="button" class="btn small" data-copy="wn_a>t2aa">Copy what I wrote above</button></div><div class="try"><span class="badge">Have a go</span><div class="field"><label for="sum1">Write a summary statement to answer: How effective is the implementation of curriculum in my setting?</label><textarea id="sum1" data-key="sum1" data-label="Summary statement: how effective is the implementation of curriculum in my setting?"></textarea></div></div><h3>What could happen next?</h3><p>Let&rsquo;s start to think about what could happen next, what changes would bring improvement. Think about the learning you have had so far in this professional learning series about teaching and assessing in early childhood education. You may want to apply some of the ideas you have heard about.</p><p>Looking over the stages of planning, teaching and assessing. Copy and paste from above and then add to complete the tables below.</p><div class="try"><span class="badge">Have a go</span><h4 style="margin:1.2rem 0 .4rem">Planning <span class="k">perencanaan</span></h4><div class="tw"><table class="tbl wide"><thead><tr><th>What is happening now? (copy and paste from above, add more if you want)</th><th>How did I know? What &lsquo;data&rsquo; did I use?</th><th>What could be done better?</th><th>Even better if&hellip; (think big as this is a &lsquo;stretch&rsquo; target)</th></tr></thead><tbody><tr><td><textarea id="t4pa" data-key="t4pa" data-label="Planning: what is happening now?" aria-label="Planning: what is happening now?"></textarea></td><td><textarea id="t4pb" data-key="t4pb" data-label="Planning: how did I know? What data did I use?" aria-label="Planning: how did I know? What data did I use?"></textarea></td><td><textarea id="t4pc" data-key="t4pc" data-label="Planning: what could be done better?" aria-label="Planning: what could be done better?"></textarea></td><td><textarea id="t4pd" data-key="t4pd" data-label="Planning: even better if" aria-label="Planning: even better if"></textarea></td></tr></tbody></table></div><button type="button" class="btn small" data-copy="t2pa>t4pa;t2pb>t4pb">Copy columns 1 and 2 from above</button><h4 style="margin:1.2rem 0 .4rem">Teaching <span class="k">pembelajaran</span></h4><div class="tw"><table class="tbl wide"><thead><tr><th>What is happening now? (copy and paste from above, add more if you want)</th><th>How did I know? What &lsquo;data&rsquo; did I use?</th><th>What could be done better?</th><th>Even better if&hellip; (think big as this is a &lsquo;stretch&rsquo; target)</th></tr></thead><tbody><tr><td><textarea id="t4ta" data-key="t4ta" data-label="Teaching: what is happening now?" aria-label="Teaching: what is happening now?"></textarea></td><td><textarea id="t4tb" data-key="t4tb" data-label="Teaching: how did I know? What data did I use?" aria-label="Teaching: how did I know? What data did I use?"></textarea></td><td><textarea id="t4tc" data-key="t4tc" data-label="Teaching: what could be done better?" aria-label="Teaching: what could be done better?"></textarea></td><td><textarea id="t4td" data-key="t4td" data-label="Teaching: even better if" aria-label="Teaching: even better if"></textarea></td></tr></tbody></table></div><button type="button" class="btn small" data-copy="t2ta>t4ta;t2tb>t4tb">Copy columns 1 and 2 from above</button><h4 style="margin:1.2rem 0 .4rem">Assessing <span class="k">asesmen</span></h4><div class="tw"><table class="tbl wide"><thead><tr><th>What is happening now? (copy and paste from above, add more if you want)</th><th>How did I know? What &lsquo;data&rsquo; did I use?</th><th>What could be done better?</th><th>Even better if&hellip; (think big as this is a &lsquo;stretch&rsquo; target)</th></tr></thead><tbody><tr><td><textarea id="t4aa" data-key="t4aa" data-label="Assessing: what is happening now?" aria-label="Assessing: what is happening now?"></textarea></td><td><textarea id="t4ab" data-key="t4ab" data-label="Assessing: how did I know? What data did I use?" aria-label="Assessing: how did I know? What data did I use?"></textarea></td><td><textarea id="t4ac" data-key="t4ac" data-label="Assessing: what could be done better?" aria-label="Assessing: what could be done better?"></textarea></td><td><textarea id="t4ad" data-key="t4ad" data-label="Assessing: even better if" aria-label="Assessing: even better if"></textarea></td></tr></tbody></table></div><button type="button" class="btn small" data-copy="t2aa>t4aa;t2ab>t4ab">Copy columns 1 and 2 from above</button></div><h3>Starting small</h3><p>Change starts small. If you focus on achieving &lsquo;easy&rsquo; successes first, then everyone is motivated to keep trying.</p><div class="try"><span class="badge">Have a go</span><div class="field"><label for="ez1">Look back over your columns of &lsquo;what could be done better?&rsquo; and &lsquo;even better if&rsquo;? Can you see any &lsquo;easy targets&rsquo; that you might work on to strengthen curriculum implementation, and improve results. Write them here.</label><textarea id="ez1" data-key="ez1" data-label="Easy targets I could work on"></textarea></div></div><h3>Change</h3><p>Changing is sometimes easy, sometimes hard. Before coming to class, think about these two questions and make some notes;</p><div class="try"><span class="badge">Have a go</span><div class="field"><label for="ch1">What could help change to strengthen curriculum implementation in your setting?</label><textarea id="ch1" data-key="ch1" data-label="What could help change"></textarea></div><div class="field"><label for="ch2">What might stop change to strengthen curriculum implementation in your setting? Are these &lsquo;barriers&rsquo; removable?</label><textarea id="ch2" data-key="ch2" data-label="What might stop change; are these barriers removable"></textarea></div></div><p>Come along to Module 5 with your notes from this work. Also be ready to share the answer to this question:</p><div class="try"><span class="badge">Have a go</span><div class="field"><label for="fi1">What is one interesting finding to share? Write it here so you have it for the module.</label><textarea id="fi1" data-key="fi1" data-label="One interesting finding to share"></textarea></div></div></section><section class="step s2" id="s2"><span class="num">2</span><span class="time">about 25 min</span><h2>Goal setting<span class="id">Menetapkan tujuan</span></h2><p>Clear goals can support change. It provides direction, focus and times for celebration when they are achieved.</p><p>Watch this video: <a href="https://www.bing.com/videos/riverview/relatedvideo?q=framework%20for%20action%20planning%20in%20education&amp;mid=32D40CD5660409B284C632D40CD5660409B284C6&amp;ajaxhist=0" target="_blank" rel="noopener">SMART goals</a></p><p>Let&rsquo;s have a go with setting goals with an areas that you are most familiar with &ndash; your day-to-day life. Have a go at setting a life SMART goal. Follow these steps</p><div class="try"><span class="badge">Have a go</span><ul style="display:flex;flex-direction:column;gap:.5em"><li>Make a full list of things you would like to achieve in your life</li><li>Prioritise (relevance for this time in your life)</li><li>Select the most important for your life at present (timely, start small with just one)</li><li>Write major steps to achieving this one goal (actionable)</li><li>How long will these steps take (time)</li><li>What does success look like? (measurable)</li><li>Tie it all together into a specific statement (specific)</li></ul><p><strong>RESULT: Goal that is SMART &#128522;</strong></p><div class="field"><label for="goal1">Write your goal here.</label><textarea id="goal1" data-key="goal1" data-label="My life SMART goal"></textarea></div></div></section><section class="step s3" id="s3"><span class="num">3</span><span class="time">about 5 min</span><h2>Bring it to the session<span class="id">Bawa ke sesi</span></h2><div class="try"><span class="badge">Have a go</span><p>Download your notes and tables and bring them to the session.</p><div class="tools"><button type="button" class="btn primary" data-export>Download my responses</button><span class="status">Your answers are saved on this device only. The download includes all of them. / Jawaban Anda tersimpan di perangkat ini.</span></div></div></section><section class="lo" id="words" style="border-color:var(--grape);box-shadow:0 8px 0 var(--grape-d)"><h2 style="color:var(--grape-d)">Key words<span class="id">Kata kunci</span></h2><dl class="words"><div><dt>Curriculum implementation</dt><dd><em>Pelaksanaan kurikulum</em></dd></div><div><dt>Teaching cycle</dt><dd><em>Siklus pembelajaran</em></dd></div><div><dt>Reflective practice</dt><dd><em>Praktik reflektif</em></dd></div><div><dt>Quality</dt><dd><em>Mutu</em></dd></div><div><dt>Evidence and data</dt><dd><em>Bukti dan data</em></dd></div><div><dt>Barrier</dt><dd><em>Hambatan</em></dd></div><div><dt>Action plan</dt><dd><em>Rencana tindak lanjut</em></dd></div><div><dt>SMART goal</dt><dd><em>Tujuan SMART</em></dd></div></dl><p style="font-size:.95rem;color:var(--muted)">A fuller glossary is on the programme page.</p></section>
+<section class="lo" style="border-color:var(--sky);box-shadow:0 8px 0 var(--sky-d)"><h2 style="color:var(--sky-d)">References</h2><p style="font-size:.95rem">Bromley, T. (2026). <em>Module 5: Strengthening curriculum implementation.</em> Module notes.</p></section>
+</main></div>
+<footer class="footer"><div class="footer-inner">Curtin University School of Education &times; Direktorat Guru PAUD dan PNF, Kementerian Pendidikan Dasar dan Menengah, Republik Indonesia</div></footer>
+<script>
+(function(){
+  var P='ecem5:';
+
+  function get(k){try{return localStorage.getItem(P+k)}catch(e){return null}}
+  function set(k,v){try{localStorage.setItem(P+k,v)}catch(e){}}
+  function norm(s){return s.replace(/\s+/g,' ').trim()}
+  function $(id){return document.getElementById(id)}
+  var bar=document.querySelector('#progress span');
+  function prog(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;if(bar)bar.style.width=(m>0?h.scrollTop/m*100:0)+'%'}
+  addEventListener('scroll',prog,{passive:true});prog();
+
+  document.querySelectorAll('textarea[data-key],input.tx[data-key]').forEach(function(t){var v=get(t.dataset.key);if(v)t.value=v;t.addEventListener('input',function(){set(t.dataset.key,t.value)})});
+  document.querySelectorAll('.opts[data-opts]').forEach(function(g){
+    var key=g.dataset.key,multi=!!g.dataset.multi,cur=get(key),sel=[];
+    if(multi){try{sel=JSON.parse(cur||'[]')}catch(e){}}
+    g.dataset.opts.split('|').forEach(function(o){var b=document.createElement('button');b.type='button';b.className=multi?'chip':'opt';
+      var cls=g.dataset.cls||''; if(cls){var m={'Green':'g','Amber':'a','Red':'r'}[o]; if(m)b.classList.add(m)}
+      b.textContent=o;b.setAttribute('aria-pressed',String(multi?sel.indexOf(o)>-1:cur===o));
+      b.addEventListener('click',function(){
+        if(multi){var on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',String(on));var l=[];g.querySelectorAll('.chip').forEach(function(x){if(x.getAttribute('aria-pressed')==='true')l.push(x.textContent)});set(key,JSON.stringify(l))}
+        else{g.querySelectorAll('.opt').forEach(function(x){x.setAttribute('aria-pressed','false')});b.setAttribute('aria-pressed','true');set(key,o)}});
+      g.appendChild(b)});
+  });
+  var NONE='(no response)';
+  function labelFor(el){if(el.dataset.label)return el.dataset.label;if(el.id){var l=document.querySelector('label[for="'+el.id+'"]');if(l)return norm(l.textContent)}return el.getAttribute('aria-label')||''}
+  function collect(){
+    var o=['Module 5: Strengthening Curriculum Implementation','My responses (online preparation)',''];
+    document.querySelectorAll('main .step').forEach(function(sec){
+      var h=sec.querySelector('h2');o.push(sec.id.replace('s','')+'. '+norm(h.firstChild.textContent).toUpperCase());
+      sec.querySelectorAll('[data-key]').forEach(function(el){
+        if(el.dataset.noexport)return;
+        var lab=labelFor(el),ans;
+        if(el.dataset.from){var src=document.getElementById(el.dataset.from);lab+=' ('+((src&&src.value.trim())||'method not named')+')'}
+        if(el.tagName==='TEXTAREA'||el.tagName==='INPUT')ans=el.value.trim();
+        else if(el.classList.contains('opts')){var v=get(el.dataset.key);if(el.dataset.multi){try{v=JSON.parse(v||'[]').join(', ')}catch(e){v=''}}ans=v}
+        else return;
+        o.push(lab,'  '+(ans||NONE));
+      });o.push('');
+    });return o.join('\n');
+  }
+  document.querySelectorAll('[data-export]').forEach(function(b){b.addEventListener('click',function(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([collect()],{type:'text/plain'}));a.download='my-responses-module-5.txt';document.body.appendChild(a);a.click();a.remove()})});
+  var links=[].slice.call(document.querySelectorAll('.rail a')),secs=links.map(function(a){return document.querySelector(a.getAttribute('href'))});
+  function track(){var y=innerHeight*0.4,idx=0;secs.forEach(function(s,i){if(s.getBoundingClientRect().top<=y)idx=i});if(innerHeight+scrollY>=document.body.scrollHeight-4)idx=secs.length-1;
+    links.forEach(function(a,i){var li=a.parentNode;li.classList.toggle('is-current',i===idx);li.classList.toggle('is-done',i<idx);if(i===idx)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current')})}
+  addEventListener('scroll',track,{passive:true});addEventListener('resize',track);track();
+})();
+</script>
+<script>(function(){var P='ecem5:';function get(k){try{return localStorage.getItem(P+k)}catch(e){return null}}function set(k,v){try{localStorage.setItem(P+k,v)}catch(e){}}
+function render(){var ul=document.getElementById('datalist'),l=[];try{l=JSON.parse(get('datasrc')||'[]')}catch(e){}ul.innerHTML='';if(!l.length){ul.innerHTML='<li class="none">Choose from the options above and they will appear here.</li>';return}l.forEach(function(x){var li=document.createElement('li');li.textContent=x;ul.appendChild(li)})}
+var g=document.querySelector('.opts[data-key=datasrc]');g.addEventListener('click',function(){setTimeout(render,0)});render();
+document.querySelectorAll('[data-copy]').forEach(function(b){b.addEventListener('click',function(){b.dataset.copy.split(';').forEach(function(pair){var a=pair.split('>'),src=document.getElementById(a[0]),dst=document.getElementById(a[1]);if(src&&dst){dst.value=src.value;set(a[1],dst.value)}})})})})();</script>
+</body>
+</html>

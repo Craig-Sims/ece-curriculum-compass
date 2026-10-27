@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Curriculum as a Compass for Learning in Early Childhood Education (draft)</title>
+<style>
+:root{
+  --sun:#FFC83D; --sun-d:#B87F00; --coral:#FF6F61; --coral-d:#C33B2E; --sky:#3FB8F0; --sky-d:#0B6FA3;
+  --leaf:#4CC76A; --leaf-d:#1B7F3A; --grape:#8E6CF0; --grape-d:#5A3DBF; --orange:#FF9A3C; --orange-d:#A85500;
+  --ink:#2A2B45; --muted:#58597A; --cream:#FFF8E8; --white:#fff;
+  --round:ui-rounded,"SF Pro Rounded","Avenir Next Rounded","Trebuchet MS","Segoe UI",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);background-image:radial-gradient(rgba(142,108,240,.10) 2px,transparent 2px);background-size:26px 26px;color:var(--ink);font-family:var(--round);font-size:1.125rem;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--grape-d)}
+:focus-visible{outline:4px solid var(--grape);outline-offset:3px;border-radius:10px}
+.skip{position:absolute;left:-999px;top:0;background:#fff;color:var(--ink);padding:.7rem 1rem;z-index:100}.skip:focus{left:.5rem;top:.5rem}
+#progress{position:fixed;top:0;left:0;right:0;height:8px;background:rgba(255,255,255,.7);z-index:50}
+#progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--coral),var(--sun),var(--leaf),var(--sky),var(--grape));border-radius:0 6px 6px 0}
+/* hero */
+.hero{position:relative;overflow:hidden;background:var(--herobg,var(--sky));color:#fff;border-bottom:10px solid var(--sun)}
+.hero-inner{max-width:76rem;margin:0 auto;padding:4.5rem 1.5rem 4rem;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:2rem;align-items:center;position:relative;z-index:2}
+.hero h1{font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.08;margin:0 0 .6rem;font-weight:900;letter-spacing:-.01em;text-shadow:0 3px 0 rgba(0,0,0,.14)}
+.hero .id-title{font-size:clamp(1.15rem,2.4vw,1.6rem);font-weight:800;color:#FFF3B8;margin:0 0 1rem;font-style:italic}
+.hero p{margin:.4rem 0;font-size:1.15rem;max-width:40rem}
+.hero .tag{display:inline-block;background:#fff;color:var(--sky-d);font-weight:800;border-radius:999px;padding:.25rem .9rem;margin:0 0 1rem;font-size:.95rem}
+.hero svg{width:100%;height:auto;max-width:24rem;justify-self:center;display:block}
+.blob{position:absolute;border-radius:50%;opacity:.9;z-index:1}
+.blob.b1{width:14rem;height:14rem;background:var(--coral);left:-5rem;bottom:-6rem}
+.blob.b2{width:9rem;height:9rem;background:var(--sun);right:30%;top:-4rem}
+.blob.b3{width:7rem;height:7rem;background:var(--leaf);right:-2rem;bottom:2rem}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.bob{animation:bob 4s ease-in-out infinite}.bob.d2{animation-delay:.8s}.bob.d3{animation-delay:1.6s}
+/* layout */
+.layout{max-width:76rem;margin:0 auto;padding:2.5rem 1.5rem 5rem;display:grid;grid-template-columns:13rem minmax(0,1fr);gap:2.5rem}
+.rail{position:sticky;top:1.2rem;align-self:start}
+.rail ol{list-style:none;margin:0;padding:0}
+.rail li{margin:0 0 .5rem}
+.rail a{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--muted);font-weight:800;font-size:.95rem;line-height:1.25}
+.rail .dot{flex:0 0 1.9rem;width:1.9rem;height:1.9rem;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:.85rem;border:3px solid #fff;box-shadow:0 3px 0 rgba(0,0,0,.12)}
+.rail li.is-current a{color:var(--ink)}.rail li.is-current .dot{transform:scale(1.2)}
+.rail li.is-done .dot{opacity:.75}
+main{min-width:0}
+h2{font-size:clamp(1.55rem,3vw,2.1rem);line-height:1.2;margin:0 0 .3rem;font-weight:900}
+h3{font-size:1.25rem;margin:1.6rem 0 .5rem;font-weight:800}
+h2 .id,h3 .id{display:block;font-size:1rem;font-weight:700;font-style:italic;color:var(--muted);margin-top:.15rem}
+p{max-width:46rem;margin:0 0 1rem}
+.id{font-style:italic}
+.k{display:inline-block;background:#EDE6FF;color:var(--grape-d);border-radius:999px;padding:0 .6em;font-style:italic;font-weight:700;font-size:.92em;white-space:nowrap}
+.step{background:#fff;border:5px solid var(--c);border-radius:28px;padding:1.6rem 1.7rem 1.8rem;margin:0 0 2.2rem;box-shadow:0 8px 0 var(--cd);position:relative}
+.step>.num{position:absolute;top:-1.5rem;left:1.4rem;width:3rem;height:3rem;border-radius:50%;background:var(--c);color:#fff;font-weight:900;font-size:1.4rem;display:grid;place-items:center;border:4px solid #fff;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+.step>.time{position:absolute;top:-1rem;right:1.4rem;background:var(--c);color:#fff;border-radius:999px;padding:.15rem .9rem;font-weight:800;font-size:.9rem}
+.step h2{color:var(--cd);margin-top:.6rem}
+.s1{--c:var(--coral);--cd:var(--coral-d)}.s2{--c:var(--sun);--cd:var(--sun-d)}.s3{--c:var(--leaf);--cd:var(--leaf-d)}.s4{--c:var(--sky);--cd:var(--sky-d)}.s5{--c:var(--grape);--cd:var(--grape-d)}.s6{--c:var(--orange);--cd:var(--orange-d)}.s7{--c:var(--coral);--cd:var(--coral-d)}
+.s2 .num{color:var(--ink)}.s2 .time{color:var(--ink)}
+.try{background:#FFF3C2;border:4px dashed var(--sun);border-radius:22px;padding:1.1rem 1.3rem;margin:1.1rem 0}
+.try .badge,.learn .badge{display:inline-block;font-weight:900;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:.1rem .8rem;margin-bottom:.5rem}
+.try .badge{background:var(--sun);color:var(--ink)}
+.learn{background:#E4F5FF;border:4px solid var(--sky);border-radius:22px;padding:1.1rem 1.3rem;margin:1.1rem 0}
+.learn .badge{background:var(--sky);color:#fff}
+.quote{border-left:8px solid var(--grape);background:#F3EEFF;border-radius:0 20px 20px 0;padding:.9rem 1.3rem;margin:1rem 0;font-weight:700}
+.field{margin:0 0 1rem}
+.field label{display:block;font-weight:800;margin:0 0 .35rem;color:var(--ink)}
+textarea{width:100%;min-height:5.5rem;font:inherit;padding:.7rem .9rem;border:4px solid #D9D2EE;border-radius:18px;background:#fff;color:var(--ink);resize:vertical}
+textarea:focus{border-color:var(--grape);outline:none;box-shadow:0 0 0 4px rgba(142,108,240,.25)}
+.opts{display:flex;flex-wrap:wrap;gap:.6rem;margin:.4rem 0 .6rem}
+.opt,.btn,.chip{font:inherit;font-weight:800;border:4px solid var(--grape);background:#fff;color:var(--grape-d);border-radius:999px;padding:.4rem 1.1rem;cursor:pointer;box-shadow:0 4px 0 var(--grape-d)}
+.opt:hover,.btn:hover,.chip:hover{transform:translateY(-1px)}
+.opt:active,.btn:active,.chip:active{transform:translateY(3px);box-shadow:0 1px 0 var(--grape-d)}
+.opt[aria-pressed="true"],.chip[aria-pressed="true"]{background:var(--grape);color:#fff}
+.btn.primary{background:var(--leaf);border-color:var(--leaf-d);color:#fff;box-shadow:0 4px 0 var(--leaf-d)}
+.chip{padding:.3rem .95rem}
+.sortitem{background:#fff;border:4px solid #E4DDF7;border-radius:20px;padding:.8rem 1.1rem;margin:0 0 .8rem}
+.sortitem p{margin:0 0 .4rem}
+.fb{margin:.4rem 0 0;padding:.5rem .9rem;border-radius:14px;font-size:1rem;background:#EAFBEF;border:3px solid var(--leaf);display:none}
+.fb.show{display:block}.fb.no{background:#FFF1E0;border-color:var(--orange)}
+.layers{display:grid;gap:.5rem;margin:1rem 0}
+.layers div{border-radius:16px;padding:.6rem 1rem;color:#fff;font-weight:800}
+.l1{background:var(--grape);width:100%}.l2{background:var(--sky);width:88%}.l3{background:var(--leaf-d);width:76%}.l4{background:var(--coral);width:64%}
+.layers small{display:block;font-weight:600;opacity:.95}
+.cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1rem 0}
+.card{background:#fff;border:4px solid var(--c2,#D9D2EE);border-radius:20px;padding:.9rem 1rem}
+.card h4{margin:0 0 .3rem;font-size:1.1rem}.card p{margin:0;font-size:1rem}
+.panels{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin:1rem 0}
+.panels figure{margin:0;background:#fff;border:4px solid var(--sky);border-radius:20px;overflow:hidden}
+.panels figcaption{padding:.5rem .8rem;font-size:.95rem;font-weight:700}
+.panels svg{display:block;width:100%;height:auto}
+.draft{background:#FFE9C7;border:3px dashed var(--orange-d);border-radius:16px;padding:.7rem 1rem;margin:1rem 0;font-size:.95rem}
+.draft p{margin:0;max-width:none}.draft strong{color:var(--orange-d)}
+.tools{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;margin-top:1rem}.status{font-size:.95rem;color:var(--muted)}
+.lo{background:#fff;border:5px solid var(--leaf);border-radius:28px;padding:1.3rem 1.6rem;margin:0 0 2.4rem;box-shadow:0 8px 0 var(--leaf-d)}
+.lo h2{color:var(--leaf-d)}.lo ol{padding-left:1.4rem;margin:.5rem 0 0}.lo li{margin-bottom:.4rem}
+.words{columns:2;column-gap:2rem}.words div{break-inside:avoid;margin:0 0 .7rem}
+.words dt{font-weight:900}.words dd{margin:0;color:var(--muted)}
+.footer{border-top:6px solid var(--sun);background:#fff;padding:1.6rem 1.5rem 2.3rem;color:var(--muted);font-size:.95rem}
+.footer-inner{max-width:76rem;margin:0 auto}
+@media(max-width:60rem){.hero-inner{grid-template-columns:1fr}.hero svg{max-width:14rem;justify-self:start}.layout{grid-template-columns:1fr}.rail{display:none}.cards3,.panels{grid-template-columns:1fr}.words{columns:1}}
+@media(prefers-reduced-motion:reduce){.bob{animation:none}html{scroll-behavior:auto}.opt,.btn,.chip{transition:none}}
+
+.opts[data-multi] .chip{padding:.3rem .95rem}
+input[type=text].tx{width:100%;font:inherit;padding:.55rem .9rem;border:4px solid #D9D2EE;border-radius:999px;background:#fff;color:var(--ink)}
+input[type=text].tx:focus{border-color:var(--grape);outline:none;box-shadow:0 0 0 4px rgba(142,108,240,.25)}
+.light{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem .8rem;align-items:center;background:#fff;border:4px solid #E4DDF7;border-radius:20px;padding:.7rem 1rem;margin:0 0 .7rem}
+.light .opts{margin:0;flex-wrap:nowrap;gap:.3rem}.light .opts .opt{padding:.15rem .45rem;font-size:.82rem;border-width:3px;box-shadow:0 3px 0 var(--grape-d)}
+.light>div:first-child{grid-column:1/-1}.light small{display:block;font-weight:800;color:var(--muted);font-size:.8rem}
+.opt.g[aria-pressed="true"]{background:var(--leaf);border-color:var(--leaf-d);color:#fff}
+.opt.a[aria-pressed="true"]{background:var(--sun);border-color:var(--sun-d);color:var(--ink)}
+.opt.r[aria-pressed="true"]{background:var(--coral);border-color:var(--coral-d);color:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+.two .card ul{margin:.3rem 0 0;padding-left:1.2rem}
+.petals{display:block;margin:0 auto;max-width:22rem;width:100%;height:auto}
+.scene{display:block;margin:1rem auto;max-width:34rem;width:100%;height:auto;border:4px solid var(--sky);border-radius:22px;background:#fff}
+@media(max-width:60rem){.light{grid-template-columns:1fr}.two{grid-template-columns:1fr}}
+
+.mods{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.4rem;margin:1.4rem 0 2.5rem}
+.mod{position:relative;background:#fff;border:5px solid var(--c);border-radius:26px;padding:1.5rem 1.4rem 1.3rem;box-shadow:0 8px 0 var(--cd)}
+.mnum{position:absolute;top:-1.3rem;left:1.2rem;width:2.8rem;height:2.8rem;border-radius:50%;background:var(--c);color:#fff;font-weight:900;font-size:1.3rem;display:grid;place-items:center;border:4px solid #fff;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+.mod h3{margin:.5rem 0 .2rem;font-size:1.2rem;color:var(--cd)}
+.mod .who{margin:0 0 .6rem;font-weight:800;font-size:.95rem;color:var(--muted)}
+.mod details summary{cursor:pointer;font-weight:800;color:var(--grape-d)}
+.mod ol{padding-left:1.3rem;margin:.6rem 0;font-size:1rem}.mod li{margin-bottom:.4rem}
+.mlink{margin-top:.8rem}.soon{font-weight:800;color:var(--muted)}
+.btn.primary{display:inline-block;text-decoration:none}
+.search{width:100%;max-width:26rem;font:inherit;padding:.6rem 1rem;border:4px solid #D9D2EE;border-radius:999px;margin:.4rem 0 1rem}
+.search:focus{border-color:var(--grape);outline:none}
+table.gl{border-collapse:separate;border-spacing:0;width:100%;background:#fff;border:4px solid var(--grape);border-radius:20px;overflow:hidden;font-size:1rem}
+table.gl th{background:var(--grape);color:#fff;text-align:left;padding:.6rem .9rem}
+table.gl td{padding:.6rem .9rem;border-top:2px solid #EFEAFB;vertical-align:top}
+.tw{overflow-x:auto}
+@media(max-width:60rem){.mods{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a><div id="progress" aria-hidden="true"><span></span></div>
+<header class="hero"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+<div class="hero-inner"><div>
+ <span class="tag">Technical Professional Learning Programme</span>
+ <h1>Curriculum as a Compass for Learning in Early Childhood Education</h1>
+ <p class="id-title">Kurikulum sebagai Kompas Pembelajaran di Pendidikan Anak Usia Dini</p>
+ <p>A programme for early childhood educators on translating the national curriculum into everyday classroom practice.</p>
+ <p><em>Program bagi pendidik PAUD untuk menerjemahkan kurikulum nasional ke dalam praktik pembelajaran sehari-hari.</em></p>
+</div><svg viewBox="0 0 360 330" role="img" aria-label="A compass surrounded by colourful building blocks">
+ <g class="bob"><circle cx="180" cy="150" r="104" fill="#fff"/><circle cx="180" cy="150" r="88" fill="#FFF3B8" stroke="#FF6F61" stroke-width="8"/>
+ <polygon points="180,66 198,150 180,150" fill="#FF6F61"/><polygon points="180,66 162,150 180,150" fill="#C33B2E"/>
+ <polygon points="180,234 198,150 180,150" fill="#8E6CF0"/><polygon points="180,234 162,150 180,150" fill="#5A3DBF"/>
+ <circle cx="180" cy="150" r="11" fill="#2A2B45"/>
+ <g font-family="Trebuchet MS, Arial" font-weight="900" font-size="20" fill="#2A2B45" text-anchor="middle"><text x="180" y="52">N</text><text x="180" y="262">S</text><text x="84" y="157">W</text><text x="276" y="157">E</text></g></g>
+ <g class="bob d2"><rect x="18" y="226" width="64" height="64" rx="12" fill="#4CC76A" transform="rotate(-10 50 258)"/><circle cx="50" cy="258" r="14" fill="#fff" opacity=".85"/></g>
+ <g class="bob d3"><rect x="262" y="228" width="68" height="56" rx="12" fill="#FFC83D" transform="rotate(8 296 256)"/><polygon points="296,238 312,272 280,272" fill="#fff" opacity=".85"/></g>
+ <g class="bob"><rect x="294" y="40" width="48" height="48" rx="12" fill="#8E6CF0" transform="rotate(14 318 64)"/></g>
+ <g class="bob d2"><circle cx="40" cy="64" r="26" fill="#FF9A3C"/><circle cx="40" cy="64" r="10" fill="#fff" opacity=".85"/></g>
+</svg></div></header>
+<div class="layout" style="grid-template-columns:minmax(0,1fr)"><main id="main">
+
+<section class="lo" aria-labelledby="plo"><h2 id="plo">What this programme is for<span class="id">Tujuan program ini</span></h2>
+<p>Early childhood educators already know their children and their communities. This programme helps you <strong>translate</strong> the curriculum into practice: from a curriculum goal to a plan, an experience, evidence of learning, a next step and an improvement. You bring your own curriculum. We help with the moves in between.</p>
+<h3 style="margin-top:1rem">By the end of the programme you will be able to&hellip;<span class="id">Pada akhir program Anda akan dapat&hellip;</span></h3><ol><li>Explain the curriculum <span class="k">kurikulum</span> as a compass <span class="k">kompas</span> that gives direction for planning, teaching and assessment, and not a script or an administrative record.</li><li>Plan learning experiences that weave together children&rsquo;s development in a holistic and integrated <span class="k">holistik dan terpadu</span> way, starting from a curriculum goal.</li><li>Adapt learning so that it responds to each child (child-centred <span class="k">berpusat pada anak</span>), changing how children take part while keeping the learning goal.</li><li>Observe, document and interpret children&rsquo;s learning (assessment <span class="k">asesmen</span>) and use it to decide the next teaching step.</li><li>Evaluate how the curriculum is used in their own setting and produce a realistic action plan <span class="k">rencana tindak lanjut</span>.</li><li>Bring these together by showing one curriculum goal travelling from intention to experience, evidence and improvement.</li></ol></section>
+<h2>The modules<span class="id">Modul</span></h2>
+<p>Each module has about 90 minutes of online work you do on your own, then a 3-hour live session with a break halfway.</p>
+<div class="mods"><article class="mod" style="--c:var(--coral);--cd:var(--coral-d)"><span class="mnum">1</span><h3>Curriculum as a Living Guide for Learning<span class="id">Kurikulum sebagai Panduan Pembelajaran yang Hidup</span></h3><p class="who">Professor Karen Murcia</p>
+<details><summary>What you will be able to do</summary><ol><li>Explain how a curriculum (kurikulum) works as a compass (kompas): it gives direction without prescribing every step.</li><li>Describe the four layers of curriculum (intended, planned, enacted, experienced) and spot where learning can be lost between them.</li><li>Judge whether a classroom episode shows a living curriculum, using evidence of what children do, think and learn.</li><li>Name one real challenge in how the curriculum is used in their own setting.</li></ol></details><div class="mlink"><a class="btn primary" href="ece-module-1-curriculum-living-guide.html">Open the online part</a></div></article><article class="mod" style="--c:var(--sun);--cd:var(--sun-d)"><span class="mnum">2</span><h3>Planning for Holistic Foundational Development<span class="id">Perencanaan untuk Perkembangan Fondasi yang Holistik</span></h3><p class="who">Dr Emma Cross</p>
+<details><summary>What you will be able to do</summary><ol><li>Explain what holistic development means in early childhood education and why areas of development are interconnected.</li><li>Recognise opportunities for multiple aspects of children&rsquo;s development within everyday play, routines, inquiry and learning experiences.</li><li>Use curriculum goals or intentions to develop a clear focus for learning and a lens for observation without fragmenting the child&rsquo;s experience into isolated domains.</li><li>Design or refine an integrated learning experience that intentionally supports multiple aspects of children&rsquo;s development.</li><li>Reflect on how holistic planning can be adapted to their own children, setting, community and curriculum context.</li></ol></details><div class="mlink"><a class="btn primary" href="ece-module-2-holistic-development.html">Open the online part</a></div></article><article class="mod" style="--c:var(--leaf);--cd:var(--leaf-d)"><span class="mnum">3</span><h3>Child-centred Learning: Responding to Every Child<span class="id">Pembelajaran yang Berpusat pada Anak: Menanggapi Setiap Anak</span></h3><p class="who">Dr Craig Sims</p>
+<details><summary>What you will be able to do</summary><ol><li>Describe what child-centred and developmentally appropriate practice looks like in a classroom, starting from children&rsquo;s interests, strengths and needs.</li><li>Notice a child&rsquo;s capability and what may get in the way of taking part, before looking at labels.</li><li>Adjust a planned experience so every child can take part and show understanding, changing the pathway but keeping the learning goal.</li><li>Weigh where technology, including unplugged activities, can personalise learning and where it gets in the way.</li><li>Decide what to watch for, to tell whether a support is helping or hiding a child&rsquo;s learning.</li></ol></details><div class="mlink"><a class="btn primary" href="ece-module-3-child-centred-learning.html">Open the online part</a></div></article><article class="mod" style="--c:var(--sky);--cd:var(--sky-d)"><span class="mnum">4</span><h3>Assessment for Learning in Early Childhood Education<span class="id">Asesmen untuk Pembelajaran di PAUD</span></h3><p class="who">Associate Professor Sonja Kuzich</p>
+<details><summary>What you will be able to do</summary><ol><li>Explain the principles of authentic assessment in early childhood education: formative assessment first; observation as a primary data source; assessment that is fair, objective and educational; assessment as part of the teaching and learning cycle.</li><li>Observe and document children&rsquo;s learning using techniques suited to early childhood, separating description from interpretation.</li><li>Interpret documented evidence holistically against the three learning outcome elements (CP), identifying strengths and next teaching steps.</li><li>Use assessment information to plan responsive learning experiences and communicate children&rsquo;s progress to families in clear, strengths-based language.</li></ol></details><div class="mlink"><a class="btn primary" href="ece-module-4-assessment-for-learning.html">Open the online part</a></div></article><article class="mod" style="--c:var(--grape);--cd:var(--grape-d)"><span class="mnum">5</span><h3>Strengthening Curriculum Implementation<span class="id">Memperkuat Pelaksanaan Kurikulum</span></h3><p class="who">Dr Tamara Bromley</p>
+<details><summary>What you will be able to do</summary><ol><li>Reflect upon and evaluate the effectiveness of curriculum implementation in your setting, drawing on a variety of evidence</li><li>Identify barriers and opportunities to strengthen curriculum implementation in your setting</li><li>Explain the notion of quality as it applies in your setting, and how strengthening curriculum implementation is part of increasing quality.</li><li>Describe importance of reflective practices to support quality improvement planning to strengthen curriculum implementation</li><li>Produce a realistic action plan to increase quality and strengthen curriculum implementation</li></ol></details><div class="mlink"><a class="btn primary" href="ece-module-5-strengthening-implementation.html">Open the online part</a></div></article><article class="mod" style="--c:var(--orange);--cd:var(--orange-d)"><span class="mnum">6</span><h3>Assessment and presentation session<span class="id">Sesi asesmen dan presentasi</span></h3><p class="who">All academic staff</p>
+<details><summary>What you will be able to do</summary><ol><li>Draft: assemble their outputs from each module into one portfolio and present one curriculum goal travelling from intention to experience, evidence and improvement.</li></ol></details><div class="mlink"><span class="soon">Coming soon <em>(segera hadir)</em></span></div></article></div>
+<section class="lo" id="glossary" style="border-color:var(--grape);box-shadow:0 8px 0 var(--grape-d)"><h2 style="color:var(--grape-d)">Glossary<span class="id">Daftar istilah</span></h2>
+<p>Key terms in English and Bahasa Indonesia, with the module where each is used.</p>
+<label class="sr" for="gs" style="position:absolute;left:-999px">Search the glossary</label><input id="gs" class="search" type="search" placeholder="Search / Cari istilah">
+<div class="tw"><table class="gl"><thead><tr><th>English</th><th>Bahasa Indonesia</th><th>What it means here</th><th>Module</th></tr></thead><tbody id="gt"><tr data-t="curriculum kurikulum"><td><strong>Curriculum</strong></td><td><em>Kurikulum</em></td><td>A guide for organising learning so that children develop the competencies the national goals and the school&rsquo;s vision aim for.</td><td>1</td></tr><tr data-t="compass kompas"><td><strong>Compass</strong></td><td><em>Kompas</em></td><td>The programme&rsquo;s image for the curriculum: direction without prescribing every step.</td><td>1</td></tr><tr data-t="national learning outcomes capaian pembelajaran (cp)"><td><strong>National learning outcomes</strong></td><td><em>Capaian Pembelajaran (CP)</em></td><td>Indonesia&rsquo;s national learning outcomes, organised by phase.</td><td>1, 4</td></tr><tr data-t="learning objective tujuan pembelajaran"><td><strong>Learning objective</strong></td><td><em>Tujuan pembelajaran</em></td><td>What an educator wants children to learn from a particular experience.</td><td>2</td></tr><tr data-t="deep learning pembelajaran mendalam"><td><strong>Deep learning</strong></td><td><em>Pembelajaran mendalam</em></td><td>The national approach that aims for mindful, meaningful and joyful learning.</td><td>1</td></tr><tr data-t="mindful berkesadaran"><td><strong>Mindful</strong></td><td><em>Berkesadaran</em></td><td>Learners know what they are learning and why, feel comfortable, make choices and are curious.</td><td>1</td></tr><tr data-t="meaningful bermakna"><td><strong>Meaningful</strong></td><td><em>Bermakna</em></td><td>Learning connects to real life and context, and children can use what they know.</td><td>1</td></tr><tr data-t="joyful menggembirakan"><td><strong>Joyful</strong></td><td><em>Menggembirakan</em></td><td>A positive, challenging atmosphere with interest, curiosity and room for initiative.</td><td>1</td></tr><tr data-t="thought, heart, feeling and body olah pikir, olah hati, olah rasa, olah raga"><td><strong>Thought, heart, feeling and body</strong></td><td><em>Olah pikir, olah hati, olah rasa, olah raga</em></td><td>Four ways of developing the whole person, from Ki Hajar Dewantara.</td><td>1</td></tr><tr data-t="graduate profile dimensions dimensi profil lulusan"><td><strong>Graduate profile dimensions</strong></td><td><em>Dimensi profil lulusan</em></td><td>The eight dimensions deep learning aims at, such as critical reasoning, creativity, collaboration and communication.</td><td>1</td></tr><tr data-t="understanding, applying, reflecting memahami, mengaplikasi, merefleksi"><td><strong>Understanding, applying, reflecting</strong></td><td><em>Memahami, mengaplikasi, merefleksi</em></td><td>The three kinds of learning experience in the national framework.</td><td>1, 2</td></tr><tr data-t="assessment asesmen"><td><strong>Assessment</strong></td><td><em>Asesmen</em></td><td>Gathering evidence of learning during the learning process. In the Guide, learning and assessment form one cycle.</td><td>4</td></tr><tr data-t="formative assessment asesmen formatif"><td><strong>Formative assessment</strong></td><td><em>Asesmen formatif</em></td><td>Assessment used to shape what happens next in teaching and learning.</td><td>4</td></tr><tr data-t="observation observasi"><td><strong>Observation</strong></td><td><em>Observasi</em></td><td>Watching and listening to children to gather evidence of their learning.</td><td>4</td></tr><tr data-t="documentation dokumentasi"><td><strong>Documentation</strong></td><td><em>Dokumentasi</em></td><td>Recording what was seen and heard, for example in notes, photos and work samples.</td><td>4</td></tr><tr data-t="holistic holistik"><td><strong>Holistic</strong></td><td><em>Holistik</em></td><td>Seeing the whole child, with physical, social-emotional, language, cognitive and values development connected.</td><td>2</td></tr><tr data-t="integrated terpadu"><td><strong>Integrated</strong></td><td><em>Terpadu</em></td><td>Brought together into one experience, not separated into isolated subjects.</td><td>2</td></tr><tr data-t="early childhood education pendidikan anak usia dini (paud)"><td><strong>Early childhood education</strong></td><td><em>Pendidikan Anak Usia Dini (PAUD)</em></td><td>Education for young children before primary school.</td><td>All</td></tr><tr data-t="educator pendidik"><td><strong>Educator</strong></td><td><em>Pendidik</em></td><td>The adult who plans and teaches.</td><td>All</td></tr><tr data-t="learner murid"><td><strong>Learner</strong></td><td><em>Murid</em></td><td>The Guide&rsquo;s word for the learner. In early childhood the word anak (child) is also used.</td><td>All</td></tr><tr data-t="action plan rencana tindak lanjut"><td><strong>Action plan</strong></td><td><em>Rencana tindak lanjut</em></td><td>A practical plan for what to improve, how and by when.</td><td>5</td></tr></tbody></table></div></section>
+</main></div>
+<footer class="footer"><div class="footer-inner">Curtin University School of Education &times; Direktorat Guru PAUD dan PNF, Kementerian Pendidikan Dasar dan Menengah, Republik Indonesia</div></footer>
+<script>(function(){var P='ecelp:';
+  function get(k){try{return localStorage.getItem(P+k)}catch(e){return null}}
+  function set(k,v){try{localStorage.setItem(P+k,v)}catch(e){}}
+  function norm(s){return s.replace(/\s+/g,' ').trim()}
+  function $(id){return document.getElementById(id)}
+  var bar=document.querySelector('#progress span');
+  function prog(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;if(bar)bar.style.width=(m>0?h.scrollTop/m*100:0)+'%'}
+  addEventListener('scroll',prog,{passive:true});prog();
+
+ var gs=document.getElementById('gs'),rows=[].slice.call(document.querySelectorAll('#gt tr'));
+ gs.addEventListener('input',function(){var q=gs.value.toLowerCase().trim();rows.forEach(function(r){r.style.display=(!q||r.dataset.t.indexOf(q)>-1)?'':'none'})});
+})();</script>
+</body>
+</html>

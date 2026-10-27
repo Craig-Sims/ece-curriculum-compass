@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 4: Assessment for Learning in Early Childhood Education (draft)</title>
+<style>
+:root{
+  --sun:#FFC83D; --sun-d:#B87F00; --coral:#FF6F61; --coral-d:#C33B2E; --sky:#3FB8F0; --sky-d:#0B6FA3;
+  --leaf:#4CC76A; --leaf-d:#1B7F3A; --grape:#8E6CF0; --grape-d:#5A3DBF; --orange:#FF9A3C; --orange-d:#A85500;
+  --ink:#2A2B45; --muted:#58597A; --cream:#FFF8E8; --white:#fff;
+  --round:ui-rounded,"SF Pro Rounded","Avenir Next Rounded","Trebuchet MS","Segoe UI",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);background-image:radial-gradient(rgba(142,108,240,.10) 2px,transparent 2px);background-size:26px 26px;color:var(--ink);font-family:var(--round);font-size:1.125rem;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--grape-d)}
+:focus-visible{outline:4px solid var(--grape);outline-offset:3px;border-radius:10px}
+.skip{position:absolute;left:-999px;top:0;background:#fff;color:var(--ink);padding:.7rem 1rem;z-index:100}.skip:focus{left:.5rem;top:.5rem}
+#progress{position:fixed;top:0;left:0;right:0;height:8px;background:rgba(255,255,255,.7);z-index:50}
+#progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--coral),var(--sun),var(--leaf),var(--sky),var(--grape));border-radius:0 6px 6px 0}
+/* hero */
+.hero{position:relative;overflow:hidden;background:var(--herobg,var(--sky));color:#fff;border-bottom:10px solid var(--sun)}
+.hero-inner{max-width:76rem;margin:0 auto;padding:4.5rem 1.5rem 4rem;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:2rem;align-items:center;position:relative;z-index:2}
+.hero h1{font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.08;margin:0 0 .6rem;font-weight:900;letter-spacing:-.01em;text-shadow:0 3px 0 rgba(0,0,0,.14)}
+.hero .id-title{font-size:clamp(1.15rem,2.4vw,1.6rem);font-weight:800;color:#FFF3B8;margin:0 0 1rem;font-style:italic}
+.hero p{margin:.4rem 0;font-size:1.15rem;max-width:40rem}
+.hero .tag{display:inline-block;background:#fff;color:var(--sky-d);font-weight:800;border-radius:999px;padding:.25rem .9rem;margin:0 0 1rem;font-size:.95rem}
+.hero svg{width:100%;height:auto;max-width:24rem;justify-self:center;display:block}
+.blob{position:absolute;border-radius:50%;opacity:.9;z-index:1}
+.blob.b1{width:14rem;height:14rem;background:var(--coral);left:-5rem;bottom:-6rem}
+.blob.b2{width:9rem;height:9rem;background:var(--sun);right:30%;top:-4rem}
+.blob.b3{width:7rem;height:7rem;background:var(--leaf);right:-2rem;bottom:2rem}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.bob{animation:bob 4s ease-in-out infinite}.bob.d2{animation-delay:.8s}.bob.d3{animation-delay:1.6s}
+/* layout */
+.layout{max-width:76rem;margin:0 auto;padding:2.5rem 1.5rem 5rem;display:grid;grid-template-columns:13rem minmax(0,1fr);gap:2.5rem}
+.rail{position:sticky;top:1.2rem;align-self:start}
+.rail ol{list-style:none;margin:0;padding:0}
+.rail li{margin:0 0 .5rem}
+.rail a{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--muted);font-weight:800;font-size:.95rem;line-height:1.25}
+.rail .dot{flex:0 0 1.9rem;width:1.9rem;height:1.9rem;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:.85rem;border:3px solid #fff;box-shadow:0 3px 0 rgba(0,0,0,.12)}
+.rail li.is-current a{color:var(--ink)}.rail li.is-current .dot{transform:scale(1.2)}
+.rail li.is-done .dot{opacity:.75}
+main{min-width:0}
+h2{font-size:clamp(1.55rem,3vw,2.1rem);line-height:1.2;margin:0 0 .3rem;font-weight:900}
+h3{font-size:1.25rem;margin:1.6rem 0 .5rem;font-weight:800}
+h2 .id,h3 .id{display:block;font-size:1rem;font-weight:700;font-style:italic;color:var(--muted);margin-top:.15rem}
+p{max-width:46rem;margin:0 0 1rem}
+.id{font-style:italic}
+.k{display:inline-block;background:#EDE6FF;color:var(--grape-d);border-radius:999px;padding:0 .6em;font-style:italic;font-weight:700;font-size:.92em;white-space:nowrap}
+.step{background:#fff;border:5px solid var(--c);border-radius:28px;padding:1.6rem 1.7rem 1.8rem;margin:0 0 2.2rem;box-shadow:0 8px 0 var(--cd);position:relative}
+.step>.num{position:absolute;top:-1.5rem;left:1.4rem;width:3rem;height:3rem;border-radius:50%;background:var(--c);color:#fff;font-weight:900;font-size:1.4rem;display:grid;place-items:center;border:4px solid #fff;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+.step>.time{position:absolute;top:-1rem;right:1.4rem;background:var(--c);color:#fff;border-radius:999px;padding:.15rem .9rem;font-weight:800;font-size:.9rem}
+.step h2{color:var(--cd);margin-top:.6rem}
+.s1{--c:var(--coral);--cd:var(--coral-d)}.s2{--c:var(--sun);--cd:var(--sun-d)}.s3{--c:var(--leaf);--cd:var(--leaf-d)}.s4{--c:var(--sky);--cd:var(--sky-d)}.s5{--c:var(--grape);--cd:var(--grape-d)}.s6{--c:var(--orange);--cd:var(--orange-d)}.s7{--c:var(--coral);--cd:var(--coral-d)}
+.s2 .num{color:var(--ink)}.s2 .time{color:var(--ink)}
+.try{background:#FFF3C2;border:4px dashed var(--sun);border-radius:22px;padding:1.1rem 1.3rem;margin:1.1rem 0}
+.try .badge,.learn .badge{display:inline-block;font-weight:900;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:.1rem .8rem;margin-bottom:.5rem}
+.try .badge{background:var(--sun);color:var(--ink)}
+.learn{background:#E4F5FF;border:4px solid var(--sky);border-radius:22px;padding:1.1rem 1.3rem;margin:1.1rem 0}
+.learn .badge{background:var(--sky);color:#fff}
+.quote{border-left:8px solid var(--grape);background:#F3EEFF;border-radius:0 20px 20px 0;padding:.9rem 1.3rem;margin:1rem 0;font-weight:700}
+.field{margin:0 0 1rem}
+.field label{display:block;font-weight:800;margin:0 0 .35rem;color:var(--ink)}
+textarea{width:100%;min-height:5.5rem;font:inherit;padding:.7rem .9rem;border:4px solid #D9D2EE;border-radius:18px;background:#fff;color:var(--ink);resize:vertical}
+textarea:focus{border-color:var(--grape);outline:none;box-shadow:0 0 0 4px rgba(142,108,240,.25)}
+.opts{display:flex;flex-wrap:wrap;gap:.6rem;margin:.4rem 0 .6rem}
+.opt,.btn,.chip{font:inherit;font-weight:800;border:4px solid var(--grape);background:#fff;color:var(--grape-d);border-radius:999px;padding:.4rem 1.1rem;cursor:pointer;box-shadow:0 4px 0 var(--grape-d)}
+.opt:hover,.btn:hover,.chip:hover{transform:translateY(-1px)}
+.opt:active,.btn:active,.chip:active{transform:translateY(3px);box-shadow:0 1px 0 var(--grape-d)}
+.opt[aria-pressed="true"],.chip[aria-pressed="true"]{background:var(--grape);color:#fff}
+.btn.primary{background:var(--leaf);border-color:var(--leaf-d);color:#fff;box-shadow:0 4px 0 var(--leaf-d)}
+.chip{padding:.3rem .95rem}
+.sortitem{background:#fff;border:4px solid #E4DDF7;border-radius:20px;padding:.8rem 1.1rem;margin:0 0 .8rem}
+.sortitem p{margin:0 0 .4rem}
+.fb{margin:.4rem 0 0;padding:.5rem .9rem;border-radius:14px;font-size:1rem;background:#EAFBEF;border:3px solid var(--leaf);display:none}
+.fb.show{display:block}.fb.no{background:#FFF1E0;border-color:var(--orange)}
+.layers{display:grid;gap:.5rem;margin:1rem 0}
+.layers div{border-radius:16px;padding:.6rem 1rem;color:#fff;font-weight:800}
+.l1{background:var(--grape);width:100%}.l2{background:var(--sky);width:88%}.l3{background:var(--leaf-d);width:76%}.l4{background:var(--coral);width:64%}
+.layers small{display:block;font-weight:600;opacity:.95}
+.cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1rem 0}
+.card{background:#fff;border:4px solid var(--c2,#D9D2EE);border-radius:20px;padding:.9rem 1rem}
+.card h4{margin:0 0 .3rem;font-size:1.1rem}.card p{margin:0;font-size:1rem}
+.panels{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin:1rem 0}
+.panels figure{margin:0;background:#fff;border:4px solid var(--sky);border-radius:20px;overflow:hidden}
+.panels figcaption{padding:.5rem .8rem;font-size:.95rem;font-weight:700}
+.panels svg{display:block;width:100%;height:auto}
+.draft{background:#FFE9C7;border:3px dashed var(--orange-d);border-radius:16px;padding:.7rem 1rem;margin:1rem 0;font-size:.95rem}
+.draft p{margin:0;max-width:none}.draft strong{color:var(--orange-d)}
+.tools{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;margin-top:1rem}.status{font-size:.95rem;color:var(--muted)}
+.lo{background:#fff;border:5px solid var(--leaf);border-radius:28px;padding:1.3rem 1.6rem;margin:0 0 2.4rem;box-shadow:0 8px 0 var(--leaf-d)}
+.lo h2{color:var(--leaf-d)}.lo ol{padding-left:1.4rem;margin:.5rem 0 0}.lo li{margin-bottom:.4rem}
+.words{columns:2;column-gap:2rem}.words div{break-inside:avoid;margin:0 0 .7rem}
+.words dt{font-weight:900}.words dd{margin:0;color:var(--muted)}
+.footer{border-top:6px solid var(--sun);background:#fff;padding:1.6rem 1.5rem 2.3rem;color:var(--muted);font-size:.95rem}
+.footer-inner{max-width:76rem;margin:0 auto}
+@media(max-width:60rem){.hero-inner{grid-template-columns:1fr}.hero svg{max-width:14rem;justify-self:start}.layout{grid-template-columns:1fr}.rail{display:none}.cards3,.panels{grid-template-columns:1fr}.words{columns:1}}
+@media(prefers-reduced-motion:reduce){.bob{animation:none}html{scroll-behavior:auto}.opt,.btn,.chip{transition:none}}
+
+.opts[data-multi] .chip{padding:.3rem .95rem}
+input[type=text].tx{width:100%;font:inherit;padding:.55rem .9rem;border:4px solid #D9D2EE;border-radius:999px;background:#fff;color:var(--ink)}
+input[type=text].tx:focus{border-color:var(--grape);outline:none;box-shadow:0 0 0 4px rgba(142,108,240,.25)}
+.light{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem .8rem;align-items:center;background:#fff;border:4px solid #E4DDF7;border-radius:20px;padding:.7rem 1rem;margin:0 0 .7rem}
+.light .opts{margin:0;flex-wrap:nowrap;gap:.3rem}.light .opts .opt{padding:.15rem .45rem;font-size:.82rem;border-width:3px;box-shadow:0 3px 0 var(--grape-d)}
+.light>div:first-child{grid-column:1/-1}.light small{display:block;font-weight:800;color:var(--muted);font-size:.8rem}
+.opt.g[aria-pressed="true"]{background:var(--leaf);border-color:var(--leaf-d);color:#fff}
+.opt.a[aria-pressed="true"]{background:var(--sun);border-color:var(--sun-d);color:var(--ink)}
+.opt.r[aria-pressed="true"]{background:var(--coral);border-color:var(--coral-d);color:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+.two .card ul{margin:.3rem 0 0;padding-left:1.2rem}
+.petals{display:block;margin:0 auto;max-width:22rem;width:100%;height:auto}
+.scene{display:block;margin:1rem auto;max-width:34rem;width:100%;height:auto;border:4px solid var(--sky);border-radius:22px;background:#fff}
+@media(max-width:60rem){.light{grid-template-columns:1fr}.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a><div id="progress" aria-hidden="true"><span></span></div>
+<header class="hero" style="--herobg:#5A3DBF"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>
+ <div class="hero-inner"><div>
+  <span class="tag" style="color:#5A3DBF">Module 4</span>
+  <h1>Assessment for Learning in Early Childhood Education</h1><p class="id-title">Asesmen untuk Pembelajaran di PAUD</p>
+  <p>Curriculum as a Compass for Learning in Early Childhood Education. <em>Kurikulum sebagai Kompas Pembelajaran di PAUD.</em></p>
+  <p style="font-size:1rem">Designed by Associate Professor Sonja Kuzich. Online preparation, about 90 minutes.</p>
+ </div><svg viewBox="0 0 360 330" role="img" aria-label="A compass surrounded by colourful building blocks">
+ <g class="bob"><circle cx="180" cy="150" r="104" fill="#fff"/><circle cx="180" cy="150" r="88" fill="#FFF3B8" stroke="#FF6F61" stroke-width="8"/>
+ <polygon points="180,66 198,150 180,150" fill="#FF6F61"/><polygon points="180,66 162,150 180,150" fill="#C33B2E"/>
+ <polygon points="180,234 198,150 180,150" fill="#8E6CF0"/><polygon points="180,234 162,150 180,150" fill="#5A3DBF"/>
+ <circle cx="180" cy="150" r="11" fill="#2A2B45"/>
+ <g font-family="Trebuchet MS, Arial" font-weight="900" font-size="20" fill="#2A2B45" text-anchor="middle"><text x="180" y="52">N</text><text x="180" y="262">S</text><text x="84" y="157">W</text><text x="276" y="157">E</text></g></g>
+ <g class="bob d2"><rect x="18" y="226" width="64" height="64" rx="12" fill="#4CC76A" transform="rotate(-10 50 258)"/><circle cx="50" cy="258" r="14" fill="#fff" opacity=".85"/></g>
+ <g class="bob d3"><rect x="262" y="228" width="68" height="56" rx="12" fill="#FFC83D" transform="rotate(8 296 256)"/><polygon points="296,238 312,272 280,272" fill="#fff" opacity=".85"/></g>
+ <g class="bob"><rect x="294" y="40" width="48" height="48" rx="12" fill="#8E6CF0" transform="rotate(14 318 64)"/></g>
+ <g class="bob d2"><circle cx="40" cy="64" r="26" fill="#FF9A3C"/><circle cx="40" cy="64" r="10" fill="#fff" opacity=".85"/></g>
+</svg></div></header>
+<div class="layout"><nav class="rail" aria-label="Steps"><ol><li><a href="#s1"><span class="dot" style="background:var(--coral);">1</span>What is this child learning?</a></li><li><a href="#s2"><span class="dot" style="background:var(--sun);color:var(--ink)">2</span>A quick self-check</a></li><li><a href="#s3"><span class="dot" style="background:var(--leaf);">3</span>Principles</a></li><li><a href="#s4"><span class="dot" style="background:var(--sky);">4</span>Observing and documenting</a></li><li><a href="#s5"><span class="dot" style="background:var(--grape);">5</span>One thing I will change</a></li><li><a href="#words"><span class="dot" style="background:var(--ink)">?</span>Key words</a></li></ol></nav>
+<main id="main">
+
+<section class="lo" aria-labelledby="lo"><h2 id="lo">What you will be able to do<span class="id">Apa yang akan dapat Anda lakukan</span></h2><ol><li>Explain the principles of authentic assessment in early childhood education/PAUD: formative assessment first; observation as a primary data source; assessment that is fair, objective and educational; assessment as part of the teaching and learning cycle (plan, teach, assess, reflect).</li><li>Observe and document children&rsquo;s learning using techniques suited to early childhood: anecdotal notes, observational checklists, work samples, photo documentation and portfolios, separating description from interpretation.</li><li>Interpret documented evidence holistically against the three Capaian Pembelajaran (CP) elements, identifying strengths and next teaching steps. (Religious Values and Character; Identity (Jati Diri); and Foundations of Literacy, Mathematics, Science, Technology, Engineering, and Art.)</li><li>Use assessment information to plan responsive learning experiences and communicate children&rsquo;s progress to families in clear, strengths-based language.</li></ol></section>
+<section class="step s1" id="s1"><span class="num">1</span><span class="time">about 10 min</span><h2>What is this child learning?<span class="id">Apa yang sedang dipelajari anak ini?</span></h2><p>Look at this play episode. Children are pouring water between containers.</p><svg class="scene" viewBox="0 0 420 220" role="img" aria-label="Two children pouring water between containers at a water-play table; one child watches closely">
+<rect width="420" height="220" fill="#FFF3C2"/><rect y="160" width="420" height="60" fill="#E8C87A"/>
+<rect x="110" y="110" width="200" height="14" rx="6" fill="#3FB8F0"/><rect x="120" y="124" width="12" height="50" fill="#8D6E4F"/><rect x="288" y="124" width="12" height="50" fill="#8D6E4F"/>
+<path d="M150 70 h44 l-6 38 h-32z" fill="#FF6F61"/><path d="M194 80 q18 4 28 14" stroke="#3FB8F0" stroke-width="6" fill="none"/>
+<path d="M236 84 h40 l-5 24 h-30z" fill="#8E6CF0"/><path d="M252 70 l4 -12 l4 12z" fill="#4CC76A"/>
+<g><circle cx="90" cy="76" r="18" fill="#FFB27A"/><rect x="74" y="94" width="32" height="50" rx="14" fill="#4CC76A"/></g>
+<g><circle cx="330" cy="76" r="18" fill="#E2A06A"/><rect x="314" y="94" width="32" height="50" rx="14" fill="#FFC83D"/></g></svg><div class="try"><span class="badge">Have a go</span><p><strong>What is this child learning? How do you know?</strong> Consider any of the three learning outcome elements (CP <span class="k">Capaian Pembelajaran</span>): Religious Values and Character (<em>Nilai Agama dan Budi Pekerti</em>), Identity (<em>Jati Diri</em>), and Foundations of Literacy, Mathematics, Science, Technology, Engineering and Art.</p><div class="field"><label for="p1">What I think the child is learning, and what I saw that tells me...</label><textarea id="p1" data-key="p1"></textarea></div><p style="font-size:.95rem">Prefer to speak? Record a voice note on your phone and share it in the shared space, or bring it to the live session.</p></div></section><section class="step s2" id="s2"><span class="num">2</span><span class="time">about 10 min</span><h2>A quick self-check<span class="id">Pemeriksaan diri singkat</span></h2><p>This takes about five minutes. There are no right answers.</p><div class="try"><span class="badge">Have a go</span><div class="field"><label for="q1">How do I record or document children&rsquo;s learning? (Make a list.)</label><textarea id="q1" data-key="q1"></textarea></div><div class="field"><label for="q2">How do I identify what children actually know?</label><textarea id="q2" data-key="q2"></textarea></div><div class="field"><label for="q3">How do I know what to teach next?</label><textarea id="q3" data-key="q3"></textarea></div><p><strong>I can use what I notice about children to plan what I need to teach next.</strong></p><div class="opts" role="group" aria-label="Confidence: I can use what I notice about children to plan what to teach next" data-key="conf" data-label="Confidence: I can use what I notice about children to plan what to teach next" data-opts="1 (not yet)|2|3|4|5 (very confident)"></div></div></section><section class="step s3" id="s3"><span class="num">3</span><span class="time">about 25 min</span><h2>Principles of authentic assessment<span class="id">Prinsip asesmen autentik</span></h2><div class="try"><span class="badge">Have a go</span><p><strong>Go back to your list</strong> of how you record children&rsquo;s learning. Write up to four methods, then use a traffic light to check each against the three principles.</p><p style="font-size:.95rem">Green: yes, mostly. Amber: sometimes. Red: not really. This is for you; there are no marks.</p><div class="light"><div><small>Method 1</small><input type="text" class="tx" id="meth0" data-key="meth0" aria-label="Recording method 1" placeholder="e.g. anecdotal notes"></div><div><small>Fair <em>(berkeadilan)</em></small><div class="opts" data-cls="1" role="group" aria-label="Method 1: Fair" data-key="tl0F" data-label="Traffic light: Fair" data-from="meth0" data-opts="Green|Amber|Red"></div></div><div><small>Objective <em>(objektif)</em></small><div class="opts" data-cls="1" role="group" aria-label="Method 1: Objective" data-key="tl0O" data-label="Traffic light: Objective" data-from="meth0" data-opts="Green|Amber|Red"></div></div><div><small>Educational <em>(edukatif)</em></small><div class="opts" data-cls="1" role="group" aria-label="Method 1: Educational" data-key="tl0E" data-label="Traffic light: Educational" data-from="meth0" data-opts="Green|Amber|Red"></div></div></div><div class="light"><div><small>Method 2</small><input type="text" class="tx" id="meth1" data-key="meth1" aria-label="Recording method 2" placeholder="e.g. anecdotal notes"></div><div><small>Fair <em>(berkeadilan)</em></small><div class="opts" data-cls="1" role="group" aria-label="Method 2: Fair" data-key="tl1F" data-label="Traffic light: Fair" data-from="meth1" data-opts="Green|Amber|Red"></div></div><div><small>Objective <em>(objektif)</em></small><div class="opts" data-cls="1" role="group" aria-label="Method 2: Objective" data-key="tl1O" data-label="Traffic light: Objective" data-from="meth1" data-opts="Green|Amber|Red"></div></div><div><small>Educational <em>(edukatif)</em></small><div class="opts" data-cls="1" role="group" aria-label="Method 2: Educational" data-key="tl1E" data-label="Traffic light: Educational" data-from="meth1" data-opts="Green|Amber|Red"></div></div></div><div class="light"><div><small>Method 3</small><input type="text" class="tx" id="meth2" data-key="meth2" aria-label="Recording method 3" placeholder="e.g. anecdotal notes"></div><div><small>Fair <em>(berkeadilan)</em></small><div class="opts" data-cls="1" role="group" aria-label="Method 3: Fair" data-key="tl2F" data-label="Traffic light: Fair" data-from="meth2" data-opts="Green|Amber|Red"></div></div><div><small>Objective <em>(objektif)</em></small><div class="opts" data-cls="1" role="group" aria-label="Method 3: Objective" data-key="tl2O" data-label="Traffic light: Objective" data-from="meth2" data-opts="Green|Amber|Red"></div></div><div><small>Educational <em>(edukatif)</em></small><div class="opts" data-cls="1" role="group" aria-label="Method 3: Educational" data-key="tl2E" data-label="Traffic light: Educational" data-from="meth2" data-opts="Green|Amber|Red"></div></div></div><div class="light"><div><small>Method 4</small><input type="text" class="tx" id="meth3" data-key="meth3" aria-label="Recording method 4" placeholder="e.g. anecdotal notes"></div><div><small>Fair <em>(berkeadilan)</em></small><div class="opts" data-cls="1" role="group" aria-label="Method 4: Fair" data-key="tl3F" data-label="Traffic light: Fair" data-from="meth3" data-opts="Green|Amber|Red"></div></div><div><small>Objective <em>(objektif)</em></small><div class="opts" data-cls="1" role="group" aria-label="Method 4: Objective" data-key="tl3O" data-label="Traffic light: Objective" data-from="meth3" data-opts="Green|Amber|Red"></div></div><div><small>Educational <em>(edukatif)</em></small><div class="opts" data-cls="1" role="group" aria-label="Method 4: Educational" data-key="tl3E" data-label="Traffic light: Educational" data-from="meth3" data-opts="Green|Amber|Red"></div></div></div></div><div class="learn"><span class="badge">Build understanding</span><p><strong>What the Guide says</strong> (<em>Panduan Pembelajaran dan Asesmen</em>, 2025):</p><div class="cards3"><div class="card" style="--c2:var(--leaf)"><h4>Learning and assessment are one cycle</h4><p>Assessment gives information about what learning to design next, and learning gives new evidence to assess.</p></div><div class="card" style="--c2:var(--sky)"><h4>Observation and performance</h4><p>Assessment is not only written or oral tests. It can use observation (children observed regularly over time) and performance techniques (practice, product, project and portfolio).</p></div><div class="card" style="--c2:var(--coral)"><h4>In PAUD, the whole child</h4><p>What is monitored is not only progress in the CP elements, but the child&rsquo;s growth and development as a whole.</p></div></div><div class="cards3"><div class="card" style="--c2:var(--grape)"><h4>Fair <span class="k">berkeadilan</span></h4><p>Not affected by background or identity. Accommodations for children with special needs. Teachers set criteria and share them. For the move from PAUD to primary school, reading, writing and counting tests are not used as entry criteria.</p></div><div class="card" style="--c2:var(--orange)"><h4>Objective <span class="k">objektif</span></h4><p>Based on factual information about development or learning, with clear, agreed criteria and not personal impressions. Uses a range of techniques, including observation.</p></div><div class="card" style="--c2:var(--leaf)"><h4>Educational <span class="k">edukatif</span></h4><p>Results give feedback to educators, children and parents so learning improves. Assessment strengthens the learning process and does not only judge results.</p></div></div></div></section><section class="step s4" id="s4"><span class="num">4</span><span class="time">about 25 min</span><h2>Observing and documenting<span class="id">Mengamati dan mendokumentasikan</span></h2><div class="try"><span class="badge">Have a go</span><p><strong>Choose one documentation tool</strong> you already use and want to improve, or one you would like to know more about.</p><div class="opts" role="group" aria-label="The documentation tool I chose" data-key="tool" data-label="The documentation tool I chose" data-opts="Anecdotal note (catatan anekdot)|Checklist (daftar periksa)|Work sample (contoh hasil karya)|Photo documentation (dokumentasi foto)|Portfolio (portofolio)"></div><div class="field"><label for="t1">Why did I choose it?</label><textarea id="t1" data-key="t1"></textarea></div></div><div class="learn"><span class="badge">Build understanding</span><p>A strong record describes what the child <strong>did and said</strong> before interpreting it. Interpretations are ideas to test, not facts.</p></div><div class="try"><span class="badge">Have a go</span><div class="field"><label for="t2">Using what you have read, how could you improve your tool, or why is it already effective at showing children&rsquo;s learning?</label><textarea id="t2" data-key="t2"></textarea></div></div></section><section class="step s5" id="s5"><span class="num">5</span><span class="time">about 10 min</span><h2>One thing I will change<span class="id">Satu hal yang akan saya ubah</span></h2><div class="try"><span class="badge">Have a go</span><p>Write a short note, or record a voice note on your phone.</p><div class="field"><label for="x1">One thing I will change in how I assess is ___ because ___.</label><textarea id="x1" data-key="x1"></textarea></div><div class="field"><label for="x2">Optional: I would redesign my tool like this...</label><textarea id="x2" data-key="x2"></textarea></div><div class="tools"><button type="button" class="btn primary" data-export>Download my responses</button><span class="status">Your answers are saved on this device only. The download includes all of them. / Jawaban Anda tersimpan di perangkat ini.</span></div></div></section>
+<section class="lo" id="words" style="border-color:var(--grape);box-shadow:0 8px 0 var(--grape-d)"><h2 style="color:var(--grape-d)">Key words<span class="id">Kata kunci</span></h2><dl class="words"><div><dt>Assessment</dt><dd><em>Asesmen</em></dd></div><div><dt>Formative assessment</dt><dd><em>Asesmen formatif</em></dd></div><div><dt>Observation</dt><dd><em>Observasi</em></dd></div><div><dt>Documentation</dt><dd><em>Dokumentasi</em></dd></div><div><dt>Fair</dt><dd><em>Berkeadilan</em></dd></div><div><dt>Objective</dt><dd><em>Objektif</em></dd></div><div><dt>Educational</dt><dd><em>Edukatif</em></dd></div><div><dt>Portfolio</dt><dd><em>Portofolio</em></dd></div><div><dt>National learning outcomes</dt><dd><em>Capaian Pembelajaran (CP)</em></dd></div><div><dt>Identity</dt><dd><em>Jati Diri</em></dd></div></dl><p style="font-size:.95rem;color:var(--muted)">A fuller glossary is on the programme page.</p></section>
+<section class="lo" style="border-color:var(--sky);box-shadow:0 8px 0 var(--sky-d)"><h2 style="color:var(--sky-d)">References</h2><p style="font-size:.95rem">Badan Standar, Kurikulum, dan Asesmen Pendidikan. (2025). <em>Panduan pembelajaran dan asesmen: Pendidikan anak usia dini, jenjang pendidikan dasar, dan jenjang pendidikan menengah</em> (edisi revisi). Kementerian Pendidikan Dasar dan Menengah.</p><p style="font-size:.95rem">Kuzich, S. (2026). <em>Module planner: Assessment for Learning in ECE.</em></p></section>
+</main></div>
+<footer class="footer"><div class="footer-inner">Curtin University School of Education &times; Direktorat Guru PAUD dan PNF, Kementerian Pendidikan Dasar dan Menengah, Republik Indonesia</div></footer>
+<script>
+(function(){
+  var P='ecem4:';
+
+  function get(k){try{return localStorage.getItem(P+k)}catch(e){return null}}
+  function set(k,v){try{localStorage.setItem(P+k,v)}catch(e){}}
+  function norm(s){return s.replace(/\s+/g,' ').trim()}
+  function $(id){return document.getElementById(id)}
+  var bar=document.querySelector('#progress span');
+  function prog(){var h=document.documentElement,m=h.scrollHeight-h.clientHeight;if(bar)bar.style.width=(m>0?h.scrollTop/m*100:0)+'%'}
+  addEventListener('scroll',prog,{passive:true});prog();
+
+  document.querySelectorAll('textarea[data-key],input.tx[data-key]').forEach(function(t){var v=get(t.dataset.key);if(v)t.value=v;t.addEventListener('input',function(){set(t.dataset.key,t.value)})});
+  document.querySelectorAll('.opts[data-opts]').forEach(function(g){
+    var key=g.dataset.key,multi=!!g.dataset.multi,cur=get(key),sel=[];
+    if(multi){try{sel=JSON.parse(cur||'[]')}catch(e){}}
+    g.dataset.opts.split('|').forEach(function(o){var b=document.createElement('button');b.type='button';b.className=multi?'chip':'opt';
+      var cls=g.dataset.cls||''; if(cls){var m={'Green':'g','Amber':'a','Red':'r'}[o]; if(m)b.classList.add(m)}
+      b.textContent=o;b.setAttribute('aria-pressed',String(multi?sel.indexOf(o)>-1:cur===o));
+      b.addEventListener('click',function(){
+        if(multi){var on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',String(on));var l=[];g.querySelectorAll('.chip').forEach(function(x){if(x.getAttribute('aria-pressed')==='true')l.push(x.textContent)});set(key,JSON.stringify(l))}
+        else{g.querySelectorAll('.opt').forEach(function(x){x.setAttribute('aria-pressed','false')});b.setAttribute('aria-pressed','true');set(key,o)}});
+      g.appendChild(b)});
+  });
+  var NONE='(no response)';
+  function labelFor(el){if(el.dataset.label)return el.dataset.label;if(el.id){var l=document.querySelector('label[for="'+el.id+'"]');if(l)return norm(l.textContent)}return el.getAttribute('aria-label')||''}
+  function collect(){
+    var o=['Module 4: Assessment for Learning in Early Childhood Education','My responses (online preparation)',''];
+    document.querySelectorAll('main .step').forEach(function(sec){
+      var h=sec.querySelector('h2');o.push(sec.id.replace('s','')+'. '+norm(h.firstChild.textContent).toUpperCase());
+      sec.querySelectorAll('[data-key]').forEach(function(el){
+        var lab=labelFor(el),ans;
+        if(el.dataset.from){var src=document.getElementById(el.dataset.from);lab+=' ('+((src&&src.value.trim())||'method not named')+')'}
+        if(el.tagName==='TEXTAREA'||el.tagName==='INPUT')ans=el.value.trim();
+        else if(el.classList.contains('opts')){var v=get(el.dataset.key);if(el.dataset.multi){try{v=JSON.parse(v||'[]').join(', ')}catch(e){v=''}}ans=v}
+        else return;
+        o.push(lab,'  '+(ans||NONE));
+      });o.push('');
+    });return o.join('\n');
+  }
+  document.querySelectorAll('[data-export]').forEach(function(b){b.addEventListener('click',function(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([collect()],{type:'text/plain'}));a.download='my-responses-module-4.txt';document.body.appendChild(a);a.click();a.remove()})});
+  var links=[].slice.call(document.querySelectorAll('.rail a')),secs=links.map(function(a){return document.querySelector(a.getAttribute('href'))});
+  function track(){var y=innerHeight*0.4,idx=0;secs.forEach(function(s,i){if(s.getBoundingClientRect().top<=y)idx=i});if(innerHeight+scrollY>=document.body.scrollHeight-4)idx=secs.length-1;
+    links.forEach(function(a,i){var li=a.parentNode;li.classList.toggle('is-current',i===idx);li.classList.toggle('is-done',i<idx);if(i===idx)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current')})}
+  addEventListener('scroll',track,{passive:true});addEventListener('resize',track);track();
+})();
+</script>
+</body>
+</html>
